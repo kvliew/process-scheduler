@@ -4,6 +4,7 @@
 #include <unistd.h>
 
 #include "scheduling.h"
+#include "queue.h"
 
 int main(int argc, char **argv) {
     // command line variables
@@ -13,12 +14,12 @@ int main(int argc, char **argv) {
 
     // simulation variables
     clock = 0;
-    int numProcesses;
 
     char c;
     struct process *processes;
     processes = NULL;
 
+    // store command line arguments
     while((opt = getopt(argc, argv, "f:p:c:")) != -1) {
         switch(opt) {
             case 'f':
@@ -27,21 +28,21 @@ int main(int argc, char **argv) {
                 assert(processesFile != NULL);
                 break;
             case 'p':
-                numProcessors = atoi(optarg);
+                coreCount = atoi(optarg);
                 break;
             case 'c': // challenge task
                 break;
         }
     }
 
-    // read content from processes file into array
     // extract process count from the processes file
     numProcesses = 1;
-    for()for(c = getc(processesFile); c != EOF; c = getc(processesFile)) {
+    for(c = getc(processesFile); c != EOF; c = getc(processesFile)) {
         if(c == '\n') {
             numProcesses++;
         }
     }
+
     // store processes into array
     rewind(processesFile);
     processes = (struct process *) malloc(numProcesses * sizeof(struct process));
@@ -65,18 +66,18 @@ int main(int argc, char **argv) {
         if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
             // enqueue all processes with the 'current' time value
             while(1) {
-                // add to queue enQueue(waitingQueue, processes[processTracker]);
-                // processTracker++;
+                enQueue(waitingQueue, processes[processTracker]);
+                processTracker++;
                 if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
                     break;
                 }
             }
         }
-        // step function fcfsStep(waitingQueue, &processesCompleted, memory);
+        step(waitingQueue, &processesCompleted, memory);
         clock++;
     }
 
-    // print performance statistics
+    // print performance statistics here
 
     fclose(processesFile);
     processesFile = NULL;
@@ -84,14 +85,3 @@ int main(int argc, char **argv) {
 
     return 0;
 }
-
-/* DEBUGGING
-printf("Here is the file:\n");
-c = fgetc(processesFile);
-while(c != EOF) {
-    printf("%c", c);
-    c = fgetc(processesFile);
-}
-printf("\n");
-printf("Number of processors: %d\n", numProcessors);
-*/
