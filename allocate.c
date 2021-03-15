@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     }
 
     // extract process count from the processes file
-    numProcesses = 1;
+    int numProcesses = 1;
     for(c = getc(processesFile); c != EOF; c = getc(processesFile)) {
         if(c == '\n') {
             numProcesses++;
@@ -48,11 +48,11 @@ int main(int argc, char **argv) {
     processes = (struct process *) malloc(numProcesses * sizeof(struct process));
     assert(processes);
     for(int i = 0; i < numProcesses; i++) {
-        fscanf(inputFile, "%d %d %d %d", &processes[i].timeArrived, &processes[i].processId, &processes[i].executionTime, &processes[i].parallelisable);
+        fscanf(processesFile, "%d %d %d %d", &processes[i].timeArrived, &processes[i].processId, &processes[i].executionTime, &processes[i].parallelisable);
         processes[i].originalExecutionTime = processes[i].executionTime; // a copy of the execution time is stored to calculate performance statistics
     }
 
-    // initialise CPU waiting queue
+    // initialise CPU waiting queue(s)***
     struct process waitingQueue[numProcesses];
     inputProcesses = numProcesses;
     processesRemaining = numProcesses;
@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        step(waitingQueue, &processesCompleted, memory);
+        step(waitingQueue, &processesCompleted);
         clock++;
     }
 

@@ -10,10 +10,14 @@ CPU States: 0 idle, 1 running
 #include "scheduling.h"
 #include "queue.h"
 
-void step(struct process waitingQueue, int *processesCompleted) {
+void step(struct process waitingQueue[], int *processesCompleted) {
 
 }
 
-void printRunning(struct process processEntry[], int *processesCompleted) {
-    printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, currentlyRunning.processId, currentlyRunning.executionTime);
+void printRunning(struct process processEntry) {
+    if(coreCount == 1) {
+        printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, currentlyRunning.processId, currentlyRunning.executionTime, currentlyRunning.cpuId);
+    } else {
+
+    }
 }

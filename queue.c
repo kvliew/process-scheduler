@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "allocate.h"
+#include "scheduling.h"
 #include "queue.h"
 
-void enQueue() {
+void enQueue(struct process waitingQueue[], struct process processEntry) {
     if(back != (inputProcesses-1)) {
         if(front == -1) {
             front = 0;
@@ -14,14 +14,14 @@ void enQueue() {
     }
 }
 
-struct process deQueue() {
+struct process deQueue(struct process waitingQueue[]) {
     int difference;
     struct process temp;
     if(front == -1) {
         temp.timeArrived = -1;
         temp.processId = -1;
-        temp.memorySizeReq = -1;
-        temp.jobTime = -1;
+        temp.parallelisable = -1;
+        temp.executionTime = -1;
         return temp;
     } else {
         difference = back - front;
