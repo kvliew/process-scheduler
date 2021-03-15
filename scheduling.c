@@ -13,3 +13,7 @@ CPU States: 0 idle, 1 running
 void step(struct process waitingQueue, int *processesCompleted) {
 
 }
+
+void printRunning(struct process processEntry[], int *processesCompleted) {
+    printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, currentlyRunning.processId, currentlyRunning.executionTime);
+}
