@@ -5,7 +5,8 @@
 #include "queue.h"
 
 void enQueue(struct process waitingQueue[], struct process processEntry) {
-    if(back != (inputProcesses-1)) {
+    printf("Enqueuing %d %d %d %c\n", processEntry.timeArrived, processEntry.processId, processEntry.executionTime, processEntry.parallelisable);
+    if(back != (numProcesses-1)) {
         if(front == -1) {
             front = 0;
         }

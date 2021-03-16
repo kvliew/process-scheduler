@@ -1,13 +1,20 @@
 struct process {
-    int timeArrived, processId, executionTime, parallelisable, cpuId, originalExecutionTime;
+    int timeArrived, processId, executionTime, cpuId, originalExecutionTime;
+    char parallelisable;
 };
 struct process currentlyRunning;
+
+struct cpu {
+    int cpuRemainingTime;
+    struct process *cpuQueue;
+};
 
 int clock;
 int state;
 int processTracker;
 int processesRemaining;
-int coreCount; // number of CPUs specified in command line argument
+int numProcesses;
+int coreCount; // number of processors specified in command line argument
 
 // queue variables
 int inputProcesses;

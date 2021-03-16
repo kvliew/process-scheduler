@@ -15,9 +15,5 @@ void step(struct process waitingQueue[], int *processesCompleted) {
 }
 
 void printRunning(struct process processEntry) {
-    if(coreCount == 1) {
-        printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, currentlyRunning.processId, currentlyRunning.executionTime, currentlyRunning.cpuId);
-    } else {
-
-    }
+    printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, currentlyRunning.processId, currentlyRunning.executionTime, currentlyRunning.cpuId);
 }
