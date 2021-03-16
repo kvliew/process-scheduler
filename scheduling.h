@@ -5,7 +5,7 @@ struct process {
 struct process currentlyRunning;
 
 struct cpu {
-    int cpuRemainingTime;
+    int cpuRemainingTime, front, back;
     struct process *cpuQueue;
 };
 

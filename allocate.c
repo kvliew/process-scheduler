@@ -14,8 +14,6 @@ int main(int argc, char **argv) {
 
     // simulation variables
     clock = 0;
-    front = -1;
-    back = -1;
 
     char c;
     struct process *processes;
@@ -59,10 +57,18 @@ int main(int argc, char **argv) {
     struct cpu processors[coreCount];
     for(int k=0; k<coreCount; k++) {
         processors[k].cpuQueue = malloc(sizeof(int)*numProcesses);
+        processors[k].front = -1;
+        processors[k].back = -1;
     }
 
-    enQueue(processors[0].cpuQueue, processes[0]);
-    printf("Here is the process: %d %d %d %c\n", processors[0].cpuQueue[0].timeArrived, processors[0].cpuQueue[0].processId, processors[0].cpuQueue[0].executionTime, processors[0].cpuQueue[0].parallelisable);
+    enQueue(&processors[0], processes[0]);
+    enQueue(&processors[0], processes[1]);
+    enQueue(&processors[0], processes[2]);
+    enQueue(&processors[0], processes[3]);
+    printf("Here is process 1: %d %d %d %c\n", processors[0].cpuQueue[0].timeArrived, processors[0].cpuQueue[0].processId, processors[0].cpuQueue[0].executionTime, processors[0].cpuQueue[0].parallelisable);
+    printf("Here is process 2: %d %d %d %c\n", processors[0].cpuQueue[1].timeArrived, processors[0].cpuQueue[1].processId, processors[0].cpuQueue[1].executionTime, processors[0].cpuQueue[1].parallelisable);
+    printf("Here is process 3: %d %d %d %c\n", processors[0].cpuQueue[2].timeArrived, processors[0].cpuQueue[2].processId, processors[0].cpuQueue[2].executionTime, processors[0].cpuQueue[2].parallelisable);
+    printf("Here is process 4: %d %d %d %c\n", processors[0].cpuQueue[3].timeArrived, processors[0].cpuQueue[3].processId, processors[0].cpuQueue[3].executionTime, processors[0].cpuQueue[3].parallelisable);
 
     /*
     // simulation loop
