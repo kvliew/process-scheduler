@@ -28,3 +28,14 @@ printf("Here is process 1: %d %d %d %c\n", processors[0].cpuQueue[0].timeArrived
 printf("Here is process 2: %d %d %d %c\n", processors[0].cpuQueue[1].timeArrived, processors[0].cpuQueue[1].processId, processors[0].cpuQueue[1].executionTime, processors[0].cpuQueue[1].parallelisable);
 printf("Here is process 3: %d %d %d %c\n", processors[0].cpuQueue[2].timeArrived, processors[0].cpuQueue[2].processId, processors[0].cpuQueue[2].executionTime, processors[0].cpuQueue[2].parallelisable);
 printf("Here is process 4: %d %d %d %c\n", processors[0].cpuQueue[3].timeArrived, processors[0].cpuQueue[3].processId, processors[0].cpuQueue[3].executionTime, processors[0].cpuQueue[3].parallelisable);
+
+// test deQueue
+struct process temp;
+temp = deQueue(&processors[0]);
+printf("Dequeue process: %d %d %d %c\n", temp.timeArrived, temp.processId, temp.executionTime, temp.parallelisable);
+temp = deQueue(&processors[0]);
+printf("Dequeue process: %d %d %d %c\n", temp.timeArrived, temp.processId, temp.executionTime, temp.parallelisable);
+temp = deQueue(&processors[0]);
+printf("Dequeue process: %d %d %d %c\n", temp.timeArrived, temp.processId, temp.executionTime, temp.parallelisable);
+temp = deQueue(&processors[0]);
+printf("Dequeue process: %d %d %d %c\n", temp.timeArrived, temp.processId, temp.executionTime, temp.parallelisable);

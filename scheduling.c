@@ -10,8 +10,19 @@ CPU States: 0 idle, 1 running
 #include "scheduling.h"
 #include "queue.h"
 
-void step(struct process waitingQueue[], int *processesCompleted) {
+void step(struct cpu *processor, int *processesCompleted) {
+    if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) { // if the CPU is idle and its waiting queue is not empty
+        processor->currentlyRunning = deQueue(processor);
+        processor->cpuRemainingTime += processor->currentlyRunning.executionTime;
+        printRunning(processor->currentlyRunning);
+        processor->state = 1;
+    } else if(processor->state == 1) { // CPU is running a process
+        if(processor->cpuRemainingTime > 1) { // CPU is still running a process
+            processor->cpuRemainingTime--;
+        } else if(processor->cpuRemainingTime == 1) {
 
+        }
+    }
 }
 
 void printRunning(struct process processEntry) {

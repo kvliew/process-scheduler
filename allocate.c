@@ -59,17 +59,10 @@ int main(int argc, char **argv) {
         processors[k].cpuQueue = malloc(sizeof(int)*numProcesses);
         processors[k].front = -1;
         processors[k].back = -1;
+        processors[k].cpuRemainingTime = 0;
+        processors[k].state = 0;
+        processors[k].cpuRemainingTime = 0;
     }
-
-    enQueue(&processors[0], processes[0]);
-    enQueue(&processors[0], processes[1]);
-    enQueue(&processors[0], processes[2]);
-    enQueue(&processors[0], processes[3]);
-    printf("Here is process 1: %d %d %d %c\n", processors[0].cpuQueue[0].timeArrived, processors[0].cpuQueue[0].processId, processors[0].cpuQueue[0].executionTime, processors[0].cpuQueue[0].parallelisable);
-    printf("Here is process 2: %d %d %d %c\n", processors[0].cpuQueue[1].timeArrived, processors[0].cpuQueue[1].processId, processors[0].cpuQueue[1].executionTime, processors[0].cpuQueue[1].parallelisable);
-    printf("Here is process 3: %d %d %d %c\n", processors[0].cpuQueue[2].timeArrived, processors[0].cpuQueue[2].processId, processors[0].cpuQueue[2].executionTime, processors[0].cpuQueue[2].parallelisable);
-    printf("Here is process 4: %d %d %d %c\n", processors[0].cpuQueue[3].timeArrived, processors[0].cpuQueue[3].processId, processors[0].cpuQueue[3].executionTime, processors[0].cpuQueue[3].parallelisable);
-
     /*
     // simulation loop
     int processesCompleted = 0;
@@ -80,24 +73,25 @@ int main(int argc, char **argv) {
         if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
             // enqueue all processes with the 'current' time value
             while(1) {
-                enQueue(processors[0].cpuQueue, processes[processTracker]);
+                // perform calculations for parraliseble processes, then enqueue accordingly
+                enQueue(&processors[0], processes[processTracker]);
                 processTracker++;
                 if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
                     break;
                 }
             }
         }
-        step(waitingQueue, &processesCompleted);
+
+        // step function for each core
+        for(int k=0; k<coreCount; k++) {
+            step(&processors[k], &processesCompleted);
+        }
         clock++;
     }
     */
-
+    
     // print performance statistics here
 
-    // DEBUGGING
-    for(int j=0; j<numProcesses; j++) {
-        printf("Process %d: %d %d %d %c\n", j+1, processes[j].timeArrived, processes[j].processId, processes[j].executionTime, processes[j].parallelisable);
-    }
 
     for(int k=0; k<coreCount; k++) {
         free(processors[k].cpuQueue);
