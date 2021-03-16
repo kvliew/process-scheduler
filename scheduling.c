@@ -28,3 +28,5 @@ void step(struct cpu *processor, int *processesCompleted) {
 void printRunning(struct process processEntry) {
     printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, currentlyRunning.processId, currentlyRunning.executionTime, currentlyRunning.cpuId);
 }
+
+//test
