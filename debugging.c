@@ -68,3 +68,11 @@ printf("Here is process 3: %d %d %d %c\n", processors[0].cpuQueue[2].timeArrived
 printf("Here is process 4: %d %d %d %c\n", processors[0].cpuQueue[3].timeArrived, processors[0].cpuQueue[3].processId, processors[0].cpuQueue[3].executionTime, processors[0].cpuQueue[3].parallelisable);
 
 printf("Remaining time %d\n", processors[0].cpuRemainingTime);
+
+// alternate loop for process allocation
+for(int i=0; i<numProcesses; i++) {
+    if(processes[i].timeArrived == clock) {
+        enQueue(processors[0].cpuQueue, processes[i], &processors[0].cpuRemainingTime, &processors[0].back, &processors[0].front); // add the process to a cpu queue; choice base on time remaining and/or id number
+        processTracker++;
+    }
+}
