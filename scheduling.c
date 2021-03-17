@@ -5,6 +5,7 @@ CPU States: 0 idle, 1 running
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include <math.h>
 
 #include "scheduling.h"
@@ -44,5 +45,9 @@ void step(struct cpu *processor, int *processesCompleted) {
 }
 
 void printRunning(struct process processEntry, int id) {
-    printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, processEntry.processId, processEntry.executionTime, id);
+    if(strcmp(&processEntry.parallelisable, "n") == 0) {
+        printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, processEntry.processId, processEntry.executionTime, id);
+    } else {
+        printf("%d,RUNNING,pid=%d.%d,remaining_time=%d,cpu=%d\n", clock, processEntry.processId, id, processEntry.executionTime, id);
+    }
 }
