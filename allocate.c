@@ -64,26 +64,18 @@ int main(int argc, char **argv) {
         processors[k].cpuId = k;
     }
 
-    // simulation loop
+    // SIMULATION LOOP
     int processesCompleted = 0;
-    while(1) {
+    /*while(1) {
         if(processesCompleted == numProcesses) {
             break;
         }
         if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
-            // enqueue all processes with the 'current' time value
+            // for each process with the 'current' time value, allocate to processor with shortest remaining time, or smallest id value
             for(int i=0; i<numProcesses; i++) {
                 if(processes[i].timeArrived == clock) {
-                    enQueue(&processors[0], processes[i]); // enqueue processes[processTracker] into a processor
-                }
-            }
-            while(1) {
-                // allocation of processes to correct processor takes place here
-                enQueue(&processors[0], processes[processTracker]);
-
-                processTracker++;
-                if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
-                    break;
+                    enQueue(&processors[0], processes[i]); // add the process to a cpu queue; choose base on time remaining and/or id number
+                    processTracker++;
                 }
             }
         }
@@ -93,8 +85,8 @@ int main(int argc, char **argv) {
             step(&processors[k], &processesCompleted);
         }
         clock++;
-    }
-
+    }*/
+    
 
     // print performance statistics here
 

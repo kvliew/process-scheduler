@@ -4,19 +4,32 @@
 #include "scheduling.h"
 #include "queue.h"
 
-void enQueue(struct cpu *processor, struct process processEntry) { // sort array by execution time
-    if(processor->back != (numProcesses-1)) {
-        if(processor->front == -1) {
-            processor->front = 0;
+void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRemainingTime, int *back, int *front) { // sort array by execution time
+    struct process temp;
+    int sortingPointer;
+
+    if(*back != (numProcesses-1)) {
+        if(*front == -1) {
+            *front = 0;
         }
-        processor->back++;
-        // printf("Enqueuing %d %d %d %c...\n", processEntry.timeArrived, processEntry.processId, processEntry.executionTime, processEntry.parallelisable);
-        processor->cpuQueue[processor->back].timeArrived = processEntry.timeArrived;
-        processor->cpuQueue[processor->back].processId = processEntry.processId;
-        processor->cpuQueue[processor->back].executionTime = processEntry.executionTime;
-        processor->cpuQueue[processor->back].parallelisable = processEntry.parallelisable;
-        processor->cpuRemainingTime += processEntry.executionTime;
-        // printf("Enqueued %d %d %d %c\n", processor->cpuQueue[processor->back].timeArrived, processor->cpuQueue[processor->back].processId, processor->cpuQueue[processor->back].executionTime, processor->cpuQueue[processor->back].parallelisable);
+        (*back)++;
+        //printf("Enqueuing %d %d %d %c...\n", processEntry.timeArrived, processEntry.processId, processEntry.executionTime, processEntry.parallelisable);
+        cpuQueue[*back] = processEntry;
+        (*cpuRemainingTime) += processEntry.executionTime;
+        //printf("Enqueued %d %d %d %c\n", cpuQueue[*back].timeArrived, cpuQueue[*back].processId, cpuQueue[*back].executionTime, cpuQueue[*back].parallelisable);
+
+        // sort the array by execution time
+        sortingPointer = *back;
+        for(int i=0; i<(*back); i++) {
+            if(cpuQueue[sortingPointer].executionTime <= cpuQueue[sortingPointer-1].executionTime) {
+                temp = cpuQueue[sortingPointer-1];
+                cpuQueue[sortingPointer-1] = cpuQueue[sortingPointer];
+                cpuQueue[sortingPointer] = temp;
+                sortingPointer--;
+            } else {
+                break;
+            }
+        }
     }
 }
 
