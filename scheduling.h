@@ -28,4 +28,4 @@ int coreCount; // number of processors specified in command line argument
 int inputProcesses;
 
 void step(struct cpu *processor, int *processesCompleted);
-void printRunning(struct process processEntry);
+void printRunning(struct process processEntry, int id);

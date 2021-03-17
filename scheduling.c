@@ -10,11 +10,12 @@ CPU States: 0 idle, 1 running
 #include "scheduling.h"
 #include "queue.h"
 
+// each processor has its own step function, complete with its own process queue
 void step(struct cpu *processor, int *processesCompleted) {
     if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) { // if the CPU is idle and its waiting queue is not empty
         processor->currentlyRunning = deQueue(processor);
         processor->cpuRemainingTime += processor->currentlyRunning.executionTime;
-        printRunning(processor->currentlyRunning);
+        printRunning(processor->currentlyRunning, processor->cpuId);
         processor->state = 1;
     } else if(processor->state == 1) { // CPU is running a process
         if(processor->cpuRemainingTime > 1) { // CPU is still running a process
@@ -27,6 +28,11 @@ void step(struct cpu *processor, int *processesCompleted) {
     }
 }
 
-void printRunning(struct process processEntry) {
-    printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, currentlyRunning.processId, currentlyRunning.executionTime, currentlyRunning.cpuId);
+void printRunning(struct process processEntry, int id) {
+    printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, currentlyRunning.processId, currentlyRunning.executionTime, id);
+}
+
+
+void checkShorterTime() {
+
 }
