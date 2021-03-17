@@ -29,4 +29,3 @@ int inputProcesses;
 
 void step(struct cpu *processor, int *processesCompleted);
 void printRunning(struct process processEntry, int id);
-void findShortestExec(struct process cpuQueue[]);

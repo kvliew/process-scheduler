@@ -21,17 +21,14 @@ void step(struct cpu *processor, int *processesCompleted) {
     } else if(processor->state == 1) { // CPU is running a process
         if(processor->cpuRemainingExec > 1) { // CPU is still running a process
             if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1)) {
-                //printf("%d,Calling enqueue from Step()\n", clock);
                 enQueue(processor->cpuQueue, processor->currentlyRunning, &processor->cpuRemainingTime, &processor->back, &processor->front);
                 processor->currentlyRunning = deQueue(processor);
                 processor->cpuRemainingExec = processor->currentlyRunning.executionTime;
                 printRunning(processor->currentlyRunning, processor->cpuId);
-                processor->currentlyRunning.executionTime--;
-                processor->cpuRemainingExec--;
-            } else {
-                processor->currentlyRunning.executionTime--;
-                processor->cpuRemainingExec--;
             }
+            processor->currentlyRunning.executionTime--;
+            processor->cpuRemainingExec--;
+            processor->cpuRemainingTime--;
         } else if(processor->cpuRemainingExec == 1) { // CPU has finished a process
             if(processor->currentlyRunning.timeArrived != -1) {
                 (*processesCompleted)++;
@@ -48,9 +45,4 @@ void step(struct cpu *processor, int *processesCompleted) {
 
 void printRunning(struct process processEntry, int id) {
     printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, processEntry.processId, processEntry.executionTime, id);
-}
-
-// returns the id of the shortest cpu process
-void findShortestExec(struct process cpuQueue[]) {
-
 }
