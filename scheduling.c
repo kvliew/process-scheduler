@@ -21,7 +21,7 @@ void step(struct cpu *processor, int *processesCompleted) {
         if(processor->cpuRemainingTime > 1) { // CPU is still running a process
             processor->cpuRemainingTime--;
         } else if(processor->cpuRemainingTime == 1) {
-            printf("%d,FINISHED,id=%d,proc-remaining=%d\n", clock, processor->currentlyRunning.processId, processesCompleted);
+            printf("%d,FINISHED,id=%d,proc-remaining=%d\n", clock, processor->currentlyRunning.processId, *processesCompleted);
             processor->state = 0;
             (*processesCompleted)++;
         }
