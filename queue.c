@@ -4,22 +4,24 @@
 #include "scheduling.h"
 #include "queue.h"
 
-void enQueue(struct cpu *processor, struct process processEntry) {
+void enQueue(struct cpu *processor, struct process processEntry) { // sort array by execution time
     if(processor->back != (numProcesses-1)) {
         if(processor->front == -1) {
             processor->front = 0;
         }
         processor->back++;
-        printf("Enqueuing %d %d %d %c...\n", processEntry.timeArrived, processEntry.processId, processEntry.executionTime, processEntry.parallelisable);
+        // printf("Enqueuing %d %d %d %c...\n", processEntry.timeArrived, processEntry.processId, processEntry.executionTime, processEntry.parallelisable);
         processor->cpuQueue[processor->back].timeArrived = processEntry.timeArrived;
         processor->cpuQueue[processor->back].processId = processEntry.processId;
         processor->cpuQueue[processor->back].executionTime = processEntry.executionTime;
         processor->cpuQueue[processor->back].parallelisable = processEntry.parallelisable;
-        printf("Enqueued %d %d %d %c\n", processor->cpuQueue[processor->back].timeArrived, processor->cpuQueue[processor->back].processId, processor->cpuQueue[processor->back].executionTime, processor->cpuQueue[processor->back].parallelisable);
+        processor->cpuRemainingTime += processEntry.executionTime;
+        // printf("Enqueued %d %d %d %c\n", processor->cpuQueue[processor->back].timeArrived, processor->cpuQueue[processor->back].processId, processor->cpuQueue[processor->back].executionTime, processor->cpuQueue[processor->back].parallelisable);
     }
 }
 
 struct process deQueue(struct cpu *processor) {
+    // dequeue process with lowest remaining time
     int difference;
     struct process temp;
     if(processor->front == -1) {

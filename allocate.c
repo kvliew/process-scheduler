@@ -50,7 +50,6 @@ int main(int argc, char **argv) {
     for(int i = 0; i < numProcesses; i++) {
         fscanf(processesFile, "%d %d %d %c", &processes[i].timeArrived, &processes[i].processId, &processes[i].executionTime, &processes[i].parallelisable);
         processes[i].originalExecutionTime = processes[i].executionTime; // a copy of the execution time is stored to calculate performance statistics
-        processes[i].cpuId = -1; // not yet assigned a processor
     }
 
     // initialise array of CPUs
@@ -62,8 +61,9 @@ int main(int argc, char **argv) {
         processors[k].cpuRemainingTime = 0;
         processors[k].state = 0;
         processors[k].cpuRemainingTime = 0;
+        processors[k].cpuId = k;
     }
-    /*
+
     // simulation loop
     int processesCompleted = 0;
     while(1) {
@@ -72,9 +72,15 @@ int main(int argc, char **argv) {
         }
         if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
             // enqueue all processes with the 'current' time value
+            for(int i=0; i<numProcesses; i++) {
+                if(processes[i].timeArrived == clock) {
+                    enQueue(&processors[0], processes[i]); // enqueue processes[processTracker] into a processor
+                }
+            }
             while(1) {
-                // perform calculations for parraliseble processes, then enqueue accordingly
+                // allocation of processes to correct processor takes place here
                 enQueue(&processors[0], processes[processTracker]);
+
                 processTracker++;
                 if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
                     break;
@@ -88,8 +94,8 @@ int main(int argc, char **argv) {
         }
         clock++;
     }
-    */
-    
+
+
     // print performance statistics here
 
 
