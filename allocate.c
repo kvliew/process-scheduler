@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
         }
     }
 
-    // extract process count from the processes file
+    // count processes in file
     numProcesses = 1;
     for(c = getc(processesFile); c != EOF; c = getc(processesFile)) {
         if(c == '\n') {
@@ -60,22 +60,32 @@ int main(int argc, char **argv) {
         processors[k].back = -1;
         processors[k].cpuRemainingTime = 0;
         processors[k].state = 0;
-        processors[k].cpuRemainingTime = 0;
+        processors[k].cpuRemainingExec = 0;
         processors[k].cpuId = k;
     }
 
     // SIMULATION LOOP
     int processesCompleted = 0;
-    /*while(1) {
+    while(1) {
         if(processesCompleted == numProcesses) {
             break;
         }
         if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
             // for each process with the 'current' time value, allocate to processor with shortest remaining time, or smallest id value
+            /* alternate loop
             for(int i=0; i<numProcesses; i++) {
                 if(processes[i].timeArrived == clock) {
-                    enQueue(&processors[0], processes[i]); // add the process to a cpu queue; choose base on time remaining and/or id number
+                    enQueue(processors[0].cpuQueue, processes[i], &processors[0].cpuRemainingTime, &processors[0].back, &processors[0].front); // add the process to a cpu queue; choice base on time remaining and/or id number
                     processTracker++;
+                }
+            }
+            */
+            while(1) {
+                //printf("%d,Calling enqueue from main\n", clock);
+                enQueue(processors[0].cpuQueue, processes[processTracker], &processors[0].cpuRemainingTime, &processors[0].back, &processors[0].front);
+                processTracker++;
+                if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
+                    break;
                 }
             }
         }
@@ -85,8 +95,8 @@ int main(int argc, char **argv) {
             step(&processors[k], &processesCompleted);
         }
         clock++;
-    }*/
-    
+    }
+
 
     // print performance statistics here
 

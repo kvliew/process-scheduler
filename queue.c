@@ -34,7 +34,6 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
 }
 
 struct process deQueue(struct cpu *processor) {
-    // dequeue process with lowest remaining time
     int difference;
     struct process temp;
     if(processor->front == -1) {
