@@ -108,13 +108,16 @@ int main(int argc, char **argv) {
                         enQueue(processors[0].cpuQueue, processes[processTracker], &processors[0].cpuRemainingTime, &processors[0].back, &processors[0].front);
                         enQueue(processors[1].cpuQueue, processes[processTracker], &processors[1].cpuRemainingTime, &processors[1].back, &processors[1].front);
                     } else if(coreCount > 2) { // split parallelisable process into N subprocesses
-                        splitCount = calculateSplitCount();
+                        splitCount = calculateSplitCount(processes[processTracker].executionTime);
                         subTime = calculateSubTime(processes[processTracker].executionTime, splitCount);
                         processes[processTracker].executionTime = subTime; // update execution time in process table (processes[] array)
                         processes[processTracker].subProcessFin = splitCount;
+
+                        // enqueue processes to fastest processors
                         for(int j=0; j<coreCount; j++) {
-                            // enqueue subprocesses into N fastest processors
+
                         }
+
                     }
                 }
                 // the 'if' conditional below handles processes that arrive at the same clock time

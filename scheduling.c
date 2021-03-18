@@ -58,11 +58,17 @@ void step(struct cpu *processor, int *processesCompleted) {
 }
 
 // calculate how many times to split a parallelisable process for the N-Processor Scheduler (largest value of k such that x/k≥1)
-int calculateSplitCount() {
-    return 0;
+int calculateSplitCount(int time) {
+    int nSub = coreCount; // number of subprocesses
+    for(int i=0; i<coreCount; i++) {
+        if(nSub > time) {
+            nSub--;
+        }
+    }
+    return nSub;
 }
 
-// calculate execution time of subprocess according to how many splits ([x/k]+1, where k is the number of splits)
+// calculate execution time of subprocess based on subprocess count
 int calculateSubTime(int time, int numberOfSplits) {
     return ceil((time/numberOfSplits)+1);
 }

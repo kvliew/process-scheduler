@@ -9,13 +9,13 @@ struct cpu {
     struct process *cpuQueue;
 };
 /*
-cpuRemainingTime: sum of the execution times of all processes in cpuQueue
-cpuRemainingExec: time remaining for the current process the CPU is currently running
+cpuRemainingTime: sum of the execution times of all processes and sub processes in cpuQueue
+cpuRemainingExec: time remaining for the current process or subprocess the CPU is currently running
 front: index 0 of cpuQueue
 back: index of the last process in cpuQueue
-state: value 0 idle, value 1 running
-currentlyRunning: current process
-cpuQueue
+state: 0 for idle, 1 for running
+currentlyRunning: process or subprocess cpu is currently running
+cpuQueue: array of all unfinished processes and subprocesses assigned to CPU
 */
 
 int clock;
@@ -31,5 +31,5 @@ int inputProcesses;
 
 void step(struct cpu *processor, int *processesCompleted);
 void printRunning(struct process processEntry, int id);
-int calculateSplitCount();
+int calculateSplitCount(int time);
 int calculateSubTime(int time, int numberOfSplits);
