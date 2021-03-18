@@ -30,7 +30,7 @@ void step(struct cpu *processor, int *processesCompleted) {
             processor->currentlyRunning.executionTime--;
             processor->cpuRemainingExec--;
             processor->cpuRemainingTime--;
-        } else if(processor->cpuRemainingExec == 1) { // CPU has finished a process
+        } else if(processor->cpuRemainingExec <= 1) { // CPU has finished a process
             if(processor->currentlyRunning.timeArrived != -1) {
                 (*processesCompleted)++;
                 printf("%d,FINISHED,id=%d,proc-remaining=%d\n", clock, processor->currentlyRunning.processId, numProcesses - (*processesCompleted));

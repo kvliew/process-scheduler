@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "scheduling.h"
 #include "queue.h"
@@ -68,33 +69,34 @@ int main(int argc, char **argv) {
     // SIMULATION LOOP
     int processesCompleted = 0;
     int shortestId = 0; // id of CPU with smallest amount of remaining execution time
-    int shortestRemTime = 9999;
+    int shortestRemTime = 9999; // shortest execution time
 
     while(1) {
         if(processesCompleted == numProcesses) {
             break;
         }
         if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
+
             // for each process with the 'current' time value, allocate to processor with shortest remaining time, or smallest id value
-
-
             while(1) {
-                // identify CPU with smallest remaining execution time
-                //printf("before loop %d\n", shortestRemTime);
-                for(int j=0; j<coreCount; j++) {
-                    //printf("%d #DEBUG\tprocessId=%d processor[%d].cpuRemainingTime=%d\tshortestRemTime=%d\n", clock, processes[j].processId, j, processors[j].cpuRemainingTime, shortestRemTime);
-                    if(processors[j].cpuRemainingTime < shortestRemTime) {
-                        shortestId = j;
-                        shortestRemTime = processors[j].cpuRemainingTime;
+                if(strcmp(&processes[processTracker].parallelisable, "n") == 0) {
+                    for(int j=0; j<coreCount; j++) {
+                        if(processors[j].cpuRemainingTime < shortestRemTime) {
+                            shortestId = j;
+                            shortestRemTime = processors[j].cpuRemainingTime;
+                        }
                     }
-                    //printf("%d,       shortestRemTime=%d\n",clock, shortestRemTime);
-                    //printf("%d,            Process:%d CPU:%d Time:%d\n", clock, processes[processTracker].processId, j, processors[j].cpuRemainingTime);
+                    enQueue(processors[shortestId].cpuQueue, processes[processTracker], &processors[shortestId].cpuRemainingTime, &processors[shortestId].back, &processors[shortestId].front);
+                    processTracker++;
+                    shortestId = 0;
+                    shortestRemTime = 9999;
+                } else if(strcmp(&processes[processTracker].parallelisable, "p") == 0) {
+                    printf("parallelisable process found\n");
+                    for(int j=0; j<coreCount; j++) {
+                        // find x smallest processors
+                    }
+                    processTracker++;
                 }
-                //printf("%d,\t\t\tSHORTEST ID IS %d\n", clock, shortestId);
-                enQueue(processors[shortestId].cpuQueue, processes[processTracker], &processors[shortestId].cpuRemainingTime, &processors[shortestId].back, &processors[shortestId].front);
-                processTracker++;
-                shortestId = 0;
-                shortestRemTime = 9999;
                 if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
                     break;
                 }

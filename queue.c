@@ -13,10 +13,10 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
             *front = 0;
         }
         (*back)++;
-        //printf("Enqueuing %d %d %d %c...\n", processEntry.timeArrived, processEntry.processId, processEntry.executionTime, processEntry.parallelisable);
+        //printf("%d,Enqueuing %d %d %d %c...\n", clock, processEntry.timeArrived, processEntry.processId, processEntry.executionTime, processEntry.parallelisable);
         cpuQueue[*back] = processEntry;
         (*cpuRemainingTime) += processEntry.executionTime;
-        //printf("Enqueued %d %d %d %c\n", cpuQueue[*back].timeArrived, cpuQueue[*back].processId, cpuQueue[*back].executionTime, cpuQueue[*back].parallelisable);
+        //printf("%d,Enqueued %d %d %d %c\n", clock, cpuQueue[*back].timeArrived, cpuQueue[*back].processId, cpuQueue[*back].executionTime, cpuQueue[*back].parallelisable);
 
         // sort the array by execution time
         sortingPointer = *back;
