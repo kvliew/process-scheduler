@@ -13,13 +13,7 @@ CPU States: 0 idle, 1 running
 
 // each processor has its own step function, complete with its own process queue
 void step(struct cpu *processor, int *processesCompleted) {
-    if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) { // CPU is idle and its waiting queue is not empty
-        processor->currentlyRunning = deQueue(processor);
-        processor->cpuRemainingTime += processor->currentlyRunning.executionTime;
-        processor->cpuRemainingExec = processor->currentlyRunning.executionTime;
-        printRunning(processor->currentlyRunning, processor->cpuId);
-        processor->state = 1;
-    } else if(processor->state == 1) { // CPU is running a process or subprocess
+    if(processor->state == 1) {
         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
             if(processor->currentlyRunning.timeArrived != -1) {
                 if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
@@ -53,6 +47,14 @@ void step(struct cpu *processor, int *processesCompleted) {
             processor->cpuRemainingTime--;
         }
     }
+
+    else if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) { // CPU is idle and its waiting queue is not empty
+        processor->currentlyRunning = deQueue(processor);
+        processor->cpuRemainingTime += processor->currentlyRunning.executionTime;
+        processor->cpuRemainingExec = processor->currentlyRunning.executionTime;
+        printRunning(processor->currentlyRunning, processor->cpuId);
+        processor->state = 1;
+    }
 }
 
 // calculate how many times to split a parallelisable process for the N-Processor Scheduler (largest value of k such that x/k≥1)
@@ -62,7 +64,7 @@ int calculateSplitCount() {
 
 // calculate execution time of subprocess according to how many splits ([x/k]+1, where k is the number of splits)
 int calculateSubTime(int time, int numberOfSplits) {
-    return (time/numberOfSplits)+1;
+    return ceil((time/numberOfSplits)+1);
 }
 
 void printRunning(struct process processEntry, int id) {
