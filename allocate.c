@@ -17,7 +17,6 @@ int main(int argc, char **argv) {
     clock = 0;
 
     char c;
-    struct process *processes;
     processes = NULL;
 
     // store command line arguments
@@ -51,6 +50,8 @@ int main(int argc, char **argv) {
     for(int i = 0; i < numProcesses; i++) {
         fscanf(processesFile, "%d %d %d %c", &processes[i].timeArrived, &processes[i].processId, &processes[i].executionTime, &processes[i].parallelisable);
         processes[i].originalExecutionTime = processes[i].executionTime; // a copy of the execution time is stored to calculate performance statistics
+        processes[i].subProcessIndex = i;
+        processes[i].subProcessFin = 9999;
     }
 
     // initialise array of CPUs
@@ -96,16 +97,17 @@ int main(int argc, char **argv) {
                 else if(strcmp(&processes[processTracker].parallelisable, "p") == 0 && coreCount > 1) {
                     // for dual-cores, allocate to both. for 'N≥3 Cores', allocate according to x/k≥1 rule
                     if(coreCount == 2) { // split into 2
-                        subTime = calculateSubTime(processes[processTracker].executionTime, 2);
-                        
+                        subTime = calculateSubTime(processes[processTracker].executionTime, 2); // calculate new execution time
+                        processes[processTracker].executionTime = subTime; // update execution time in process table (processes[] array)
+                        processes[processTracker].subProcessFin = 2;
                         enQueue(processors[0].cpuQueue, processes[processTracker], &processors[0].cpuRemainingTime, &processors[0].back, &processors[0].front);
                         enQueue(processors[1].cpuQueue, processes[processTracker], &processors[1].cpuRemainingTime, &processors[1].back, &processors[1].front);
-                    } else if(coreCount > 2) {
+                    } else if(coreCount > 2) { // split into N
                         splitCount = calculateSplitCount();
                         subTime = calculateSubTime(processes[processTracker].executionTime, splitCount);
-                    }
-                    for(int j=0; j<coreCount; j++) {
-
+                        for(int j=0; j<coreCount; j++) {
+                            // enqueue subprocesses into N fastest processors
+                        }
                     }
                 }
                 // the 'if' conditional below handles processes that arrive at the same clock time

@@ -1,5 +1,5 @@
 struct process {
-    int timeArrived, processId, executionTime, originalExecutionTime;
+    int timeArrived, processId, executionTime, originalExecutionTime, subProcessIndex, subProcessFin;
     char parallelisable;
 };
 
@@ -23,6 +23,8 @@ int processTracker;
 int processesRemaining;
 int numProcesses;
 int coreCount; // number of processors specified in command line argument
+
+struct process *processes;
 
 // queue variables
 int inputProcesses;
