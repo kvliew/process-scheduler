@@ -36,7 +36,7 @@ int main(int argc, char **argv) {
     }
 
     // count processes in file
-    numProcesses = 1;
+    numProcesses = 0;
     for(c = getc(processesFile); c != EOF; c = getc(processesFile)) {
         if(c == '\n') {
             numProcesses++;
@@ -54,6 +54,10 @@ int main(int argc, char **argv) {
         processes[i].subProcessFin = 9999;
     }
 
+    /*for(int i=0; i<numProcesses; i++) {
+        printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
+    }*/
+
     // initialise array of CPUs
     struct cpu processors[coreCount];
     for(int k=0; k<coreCount; k++) {
@@ -68,6 +72,7 @@ int main(int argc, char **argv) {
     }
 
     // SIMULATION LOOP
+
     int splitCount; // stores number of times a parallelisable process is split
     int subTime; // stores the execution time of a subprocess
     int processesCompleted = 0;
@@ -96,15 +101,17 @@ int main(int argc, char **argv) {
                 }
                 else if(strcmp(&processes[processTracker].parallelisable, "p") == 0 && coreCount > 1) {
                     // for dual-cores, allocate to both. for 'N≥3 Cores', allocate according to x/k≥1 rule
-                    if(coreCount == 2) { // split into 2
+                    if(coreCount == 2) { // split parallelisable process into 2 subprocesses
                         subTime = calculateSubTime(processes[processTracker].executionTime, 2); // calculate new execution time
                         processes[processTracker].executionTime = subTime; // update execution time in process table (processes[] array)
                         processes[processTracker].subProcessFin = 2;
                         enQueue(processors[0].cpuQueue, processes[processTracker], &processors[0].cpuRemainingTime, &processors[0].back, &processors[0].front);
                         enQueue(processors[1].cpuQueue, processes[processTracker], &processors[1].cpuRemainingTime, &processors[1].back, &processors[1].front);
-                    } else if(coreCount > 2) { // split into N
+                    } else if(coreCount > 2) { // split parallelisable process into N subprocesses
                         splitCount = calculateSplitCount();
                         subTime = calculateSubTime(processes[processTracker].executionTime, splitCount);
+                        processes[processTracker].executionTime = subTime; // update execution time in process table (processes[] array)
+                        processes[processTracker].subProcessFin = splitCount;
                         for(int j=0; j<coreCount; j++) {
                             // enqueue subprocesses into N fastest processors
                         }
