@@ -67,9 +67,11 @@ int main(int argc, char **argv) {
     }
 
     // SIMULATION LOOP
+    int splitCount; // stores number of times a parallelisable process is split
+    int subTime; // stores the execution time of a subprocess
     int processesCompleted = 0;
-    int shortestId = 0; // id of CPU with smallest amount of remaining execution time
-    int shortestRemTime = 9999; // shortest execution time
+    int shortestId = 0; // id of CPU with smallest amount of remaining execution time (fastest processor)
+    int shortestRemTime = 9999; // execution time of the fastest processor
     while(1) {
         // all processes completed
         if(processesCompleted == numProcesses) {
@@ -79,9 +81,8 @@ int main(int argc, char **argv) {
         // for each process with the 'current' time value, allocate to processor with shortest remaining time, or smallest id value
         if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
             while(1) {
-                // non-parallelisable process
-                if(strcmp(&processes[processTracker].parallelisable, "n") == 0) {
-                    // allocate to the fastest processor, no splitting occurs
+                if(strcmp(&processes[processTracker].parallelisable, "n") == 0 || coreCount == 1) {
+                    // allocate process to the fastest processor, no splitting occurs
                     for(int j=0; j<coreCount; j++) {
                         if(processors[j].cpuRemainingTime < shortestRemTime) {
                             shortestId = j;
@@ -92,14 +93,22 @@ int main(int argc, char **argv) {
                     shortestId = 0;
                     shortestRemTime = 9999;
                 }
-                // parallelisable process
-                else if(strcmp(&processes[processTracker].parallelisable, "p") == 0) {
+                else if(strcmp(&processes[processTracker].parallelisable, "p") == 0 && coreCount > 1) {
                     // for dual-cores, allocate to both. for 'N≥3 Cores', allocate according to x/k≥1 rule
+                    if(coreCount == 2) { // split into 2
+                        subTime = calculateSubTime(processes[processTracker].executionTime, 2);
+                        
+                        enQueue(processors[0].cpuQueue, processes[processTracker], &processors[0].cpuRemainingTime, &processors[0].back, &processors[0].front);
+                        enQueue(processors[1].cpuQueue, processes[processTracker], &processors[1].cpuRemainingTime, &processors[1].back, &processors[1].front);
+                    } else if(coreCount > 2) {
+                        splitCount = calculateSplitCount();
+                        subTime = calculateSubTime(processes[processTracker].executionTime, splitCount);
+                    }
                     for(int j=0; j<coreCount; j++) {
 
                     }
                 }
-                // conditional handles processes that arrive at the same time
+                // the 'if' conditional below handles processes that arrive at the same clock time
                 processTracker++;
                 if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
                     break;
