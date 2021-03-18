@@ -29,3 +29,5 @@ int inputProcesses;
 
 void step(struct cpu *processor, int *processesCompleted);
 void printRunning(struct process processEntry, int id);
+int calculateSplitCount();
+int calculateSubTime(int time, int numberOfSplits);

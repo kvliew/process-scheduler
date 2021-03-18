@@ -70,16 +70,18 @@ int main(int argc, char **argv) {
     int processesCompleted = 0;
     int shortestId = 0; // id of CPU with smallest amount of remaining execution time
     int shortestRemTime = 9999; // shortest execution time
-
     while(1) {
+        // all processes completed
         if(processesCompleted == numProcesses) {
             break;
         }
-        if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
 
-            // for each process with the 'current' time value, allocate to processor with shortest remaining time, or smallest id value
+        // for each process with the 'current' time value, allocate to processor with shortest remaining time, or smallest id value
+        if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
             while(1) {
+                // non-parallelisable process
                 if(strcmp(&processes[processTracker].parallelisable, "n") == 0) {
+                    // allocate to the fastest processor, no splitting occurs
                     for(int j=0; j<coreCount; j++) {
                         if(processors[j].cpuRemainingTime < shortestRemTime) {
                             shortestId = j;
@@ -87,16 +89,18 @@ int main(int argc, char **argv) {
                         }
                     }
                     enQueue(processors[shortestId].cpuQueue, processes[processTracker], &processors[shortestId].cpuRemainingTime, &processors[shortestId].back, &processors[shortestId].front);
-                    processTracker++;
                     shortestId = 0;
                     shortestRemTime = 9999;
-                } else if(strcmp(&processes[processTracker].parallelisable, "p") == 0) {
-                    printf("parallelisable process found\n");
-                    for(int j=0; j<coreCount; j++) {
-                        // find x smallest processors
-                    }
-                    processTracker++;
                 }
+                // parallelisable process
+                else if(strcmp(&processes[processTracker].parallelisable, "p") == 0) {
+                    // for dual-cores, allocate to both. for 'N≥3 Cores', allocate according to x/k≥1 rule
+                    for(int j=0; j<coreCount; j++) {
+
+                    }
+                }
+                // conditional handles processes that arrive at the same time
+                processTracker++;
                 if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
                     break;
                 }

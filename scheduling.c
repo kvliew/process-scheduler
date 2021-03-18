@@ -44,6 +44,16 @@ void step(struct cpu *processor, int *processesCompleted) {
     }
 }
 
+// calculate how many times to split a parallelisable process for the N-Processor Scheduler (largest value of k such that x/k≥1)
+int calculateSplitCount() {
+    return 0;
+}
+
+// calculate execution time of subprocess according to how many splits ([x/k]+1, where k is the number of splits)
+int calculateSubTime(int time, int numberOfSplits) {
+    return 0;
+}
+
 void printRunning(struct process processEntry, int id) {
     if(strcmp(&processEntry.parallelisable, "n") == 0) {
         printf("%d,RUNNING,pid=%d,remaining_time=%d,cpu=%d\n", clock, processEntry.processId, processEntry.executionTime, id);
