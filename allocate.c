@@ -101,7 +101,9 @@ int main(int argc, char **argv) {
                             shortestRemTime = processors[j].cpuRemainingTime;
                         }
                     }
+                    //printf("Enqueuing process %d to CPU %d\n", processes[processTracker].processId, shortestId);
                     enQueue(processors[shortestId].cpuQueue, processes[processTracker], &processors[shortestId].cpuRemainingTime, &processors[shortestId].back, &processors[shortestId].front);
+                    //printf("CPU %d remaining time %d\n\n", shortestId, processors[shortestId].cpuRemainingTime);
                     shortestId = 0;
                     shortestRemTime = 9999;
                 }
@@ -140,7 +142,11 @@ int main(int argc, char **argv) {
                     break;
                 }
             }
+            processesRemaining++;
         }
+
+
+
 
         // step function for each core
         for(int k=0; k<coreCount; k++) {

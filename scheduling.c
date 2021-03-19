@@ -20,14 +20,16 @@ void step(struct cpu *processor, int *processesCompleted) {
                 if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
                     // processor has finished a non-parallelisable process
                     (*processesCompleted)++;
-                    printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, numProcesses - (*processesCompleted));
+                    processesRemaining--;
+                    printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
                     calculatePerformance(processor->currentlyRunning);
                 } else {
                     // processer has finished a parallelisable process and needs to perform further checks to determine if all subprocesses of a process has finished
                     if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
-                        printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, numProcesses - (*processesCompleted));
+                        processesRemaining--;
+                        printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
@@ -42,6 +44,7 @@ void step(struct cpu *processor, int *processesCompleted) {
             }
         } else if(processor->cpuRemainingExec > 1) { // CPU is still running a process or subprocess
             if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1)) {
+                // if fastest process in cpu queue is faster than currently running process, interrupt the current process
                 enQueue(processor->cpuQueue, processor->currentlyRunning, &processor->cpuRemainingTime, &processor->back, &processor->front);
                 processor->currentlyRunning = deQueue(processor);
                 processor->cpuRemainingExec = processor->currentlyRunning.executionTime;

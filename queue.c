@@ -30,6 +30,13 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
                 break;
             }
         }
+
+        // print queue
+        /*
+        printf("\t\t\tPRINTING QUEUE...\n");
+        for(int i=0; i<numProcesses; i++) {
+            printf("%d,\t\t\t###DEBUG###\t %d %d %d %c\n", clock, cpuQueue[i].timeArrived, cpuQueue[i].processId, cpuQueue[i].executionTime, cpuQueue[i].parallelisable);
+        }*/
     }
 }
 
