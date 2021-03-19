@@ -138,11 +138,11 @@ int main(int argc, char **argv) {
                 }
                 // the 'if' conditional below handles processes that arrive at the same clock time
                 processTracker++;
+                processesRemaining++;
                 if((processes[processTracker].timeArrived != clock) || (processTracker >= numProcesses)) {
                     break;
                 }
             }
-            processesRemaining++;
         }
 
 
