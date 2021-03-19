@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <unistd.h>
 #include <string.h>
+#include <math.h>
 
 #include "scheduling.h"
 #include "queue.h"
@@ -149,7 +150,7 @@ int main(int argc, char **argv) {
     }
 
     // print performance statistics here
-
+    printf("Turnaround time %.0f\nTime overhead %.2f %.2f\nMakespan %d\n", ceil(turnaroundSummation/processesCompleted), maxTimeOverhead, overheadSummation/processesCompleted, (clock-1));
 
     for(int k=0; k<coreCount; k++) {
         free(processors[k].cpuQueue);
