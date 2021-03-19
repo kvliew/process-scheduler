@@ -69,8 +69,11 @@ int calculateSplitCount(int time) {
 }
 
 // calculate execution time of subprocess based on subprocess count
-int calculateSubTime(int time, int numberOfSplits) {
-    return ceil((time/numberOfSplits)+1);
+int calculateSubTime(float time, float numberOfSplits) {
+    float temp = ceil((time/numberOfSplits)+1);
+    //printf("%d,\t\t\t#DEBUG#\tTime=%f\tSplits=%f\n", clock, time, numberOfSplits);
+    //printf("%d,\t\t\t#DEBUG#\t%f\n", clock, ceil(time/numberOfSplits));
+    return temp;
 }
 
 void printRunning(struct process processEntry, int id) {
