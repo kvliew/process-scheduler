@@ -78,6 +78,11 @@ int main(int argc, char **argv) {
     int processesCompleted = 0;
     int shortestId = 0; // id of CPU with smallest amount of remaining execution time (fastest processor)
     int shortestRemTime = 9999; // execution time of the fastest processor
+
+    // Np Para
+    int temp;
+    int fastestId;
+
     while(1) {
         // all processes completed
         if(processesCompleted == numProcesses) {
@@ -114,10 +119,18 @@ int main(int argc, char **argv) {
                         processes[processTracker].subProcessFin = splitCount;
 
                         // enqueue processes to fastest processors
-                        for(int j=0; j<coreCount; j++) {
-
+                        fastestId = 0;
+                        temp = processors[0].cpuRemainingTime;
+                        for(int i=0; i<splitCount; i++) {
+                            for(int j=0; j<coreCount; j++) {
+                                if(processors[j].cpuRemainingTime <= temp) {
+                                    fastestId = i;
+                                    temp = processors[i].cpuRemainingTime;
+                                }
+                            }
+                            //printf("%d,Enqueuing %d %d %d %c into CPU %d\n", clock, processes[processTracker].timeArrived, processes[processTracker].processId, processes[processTracker].executionTime, processes[processTracker].parallelisable, fastestId);
+                            enQueue(processors[fastestId].cpuQueue, processes[processTracker],  &processors[fastestId].cpuRemainingTime, &processors[fastestId].back, &processors[fastestId].front);
                         }
-
                     }
                 }
                 // the 'if' conditional below handles processes that arrive at the same clock time
