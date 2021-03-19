@@ -100,8 +100,9 @@ int main(int argc, char **argv) {
                             shortestId = j;
                             shortestRemTime = processors[j].cpuRemainingTime;
                         }
+                        //printf("%d,\t\tcpu[%d] Remaining Time %d\n", clock, j, processors[j].cpuRemainingTime);
                     }
-                    //printf("Enqueuing process %d to CPU %d\n", processes[processTracker].processId, shortestId);
+                    //printf("%d,Enqueuing process %d to CPU %d\n", clock, processes[processTracker].processId, shortestId);
                     enQueue(processors[shortestId].cpuQueue, processes[processTracker], &processors[shortestId].cpuRemainingTime, &processors[shortestId].back, &processors[shortestId].front);
                     //printf("CPU %d remaining time %d\n\n", shortestId, processors[shortestId].cpuRemainingTime);
                     shortestId = 0;

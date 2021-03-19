@@ -13,10 +13,11 @@ CPU States: 0 idle, 1 running
 
 // each processor has its own step function, complete with its own process queue
 void step(struct cpu *processor, int *processesCompleted) {
+    // CPU is running
     if(processor->state == 1) {
-        // CPU is running
         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
             if(processor->currentlyRunning.timeArrived != -1) {
+                processor->cpuRemainingTime--;
                 if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
                     // processor has finished a non-parallelisable process
                     (*processesCompleted)++;
@@ -56,14 +57,16 @@ void step(struct cpu *processor, int *processesCompleted) {
                 processor->currentlyRunning.executionTime--;
                 processor->cpuRemainingExec--;
                 processor->cpuRemainingTime--;
+                //printf("%d,CPU[%d] running process %d\tTotal remaining time %d\n", clock, processor->cpuId, processor->currentlyRunning.processId, processor->cpuRemainingTime);
             }
         }
     }
 
+    // CPU is idle
     else if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) {
-        // CPU is idle and its waiting queue is not empty
         processor->currentlyRunning = deQueue(processor);
-        processor->cpuRemainingTime += processor->currentlyRunning.executionTime;
+        //printf("\t\t\tHELLO1\n");
+        //processor->cpuRemainingTime += processor->currentlyRunning.executionTime;
         processor->cpuRemainingExec = processor->currentlyRunning.executionTime;
         printRunning(processor->currentlyRunning, processor->cpuId);
         processor->state = 1;
