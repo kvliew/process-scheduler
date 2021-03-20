@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
     int quantum = -1;
 
     // store command line arguments
-    while((opt = getopt(argc, argv, "f:p:c:")) != -1) {
+    while((opt = getopt(argc, argv, "f:p:c")) != -1) {
         switch(opt) {
             case 'f':
                 fileName = optarg;
@@ -38,6 +38,7 @@ int main(int argc, char **argv) {
                 break;
         }
     }
+    printf("\t\t\t DEBUG %d\n", quantum);
 
     // count processes in file
     numProcesses = 0;
