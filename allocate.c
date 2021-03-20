@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
                 coreCount = atoi(optarg);
                 break;
             case 'c': // challenge task
-                quantum = 50;
+                quantum = 60;
                 break;
         }
     }
