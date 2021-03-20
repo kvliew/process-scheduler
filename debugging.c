@@ -76,3 +76,54 @@ for(int i=0; i<numProcesses; i++) {
         processTracker++;
     }
 }
+
+
+
+// print FINISHED message first
+int stepRuns[coreCount];
+for(int i=0; i<coreCount; i++) {
+    stepRuns[i] = 0;
+}
+
+if(quantum == -1) {
+    for(int k=0; k<coreCount; k++) {
+        if(isFinishing(&processors[k]) == 1) {
+            step(&processors[k], &processesCompleted);
+            stepRuns[k] = 1;
+        }
+    }
+    for(int k=0; k<coreCount; k++) {
+        if(stepRuns[k] == 0) {
+            step(&processors[k], &processesCompleted);
+        }
+    }
+} else {
+    for(int k=0; k<coreCount; k++) {
+        challengeStep(&processors[k], &processesCompleted, quantum);
+    }
+}
+
+for(int i=0; i<coreCount; i++) {
+    stepRuns[i] = 0;
+}
+
+// returns 1 if the CPU will finish a process in the 'current' time step
+int isFinishing(struct cpu *processor) {
+    int finishing = 0;
+    if(processor->state == 1) {
+        if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
+            if(processor->currentlyRunning.timeArrived != -1) {
+                if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
+                    finishing = 1;
+                } else {
+                    printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
+                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
+                        finishing = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    return finishing;
+}
