@@ -20,6 +20,8 @@ int main(int argc, char **argv) {
     char c;
     processes = NULL;
 
+    int quantum = -1;
+
     // store command line arguments
     while((opt = getopt(argc, argv, "f:p:c:")) != -1) {
         switch(opt) {
@@ -32,6 +34,7 @@ int main(int argc, char **argv) {
                 coreCount = atoi(optarg);
                 break;
             case 'c': // challenge task
+                quantum = atoi(optarg);
                 break;
         }
     }
@@ -146,13 +149,17 @@ int main(int argc, char **argv) {
             }
         }
 
-
-
-
         // step function for each core
-        for(int k=0; k<coreCount; k++) {
-            step(&processors[k], &processesCompleted);
+        if(quantum == -1) {
+            for(int k=0; k<coreCount; k++) {
+                step(&processors[k], &processesCompleted);
+            }
+        } else {
+            for(int k=0; k<coreCount; k++) {
+                challengeStep(&processors[k], &processesCompleted, quantum);
+            }
         }
+
         clock++;
     }
 

@@ -4,7 +4,7 @@ struct process {
 };
 
 struct cpu {
-    int cpuRemainingTime, cpuRemainingExec, front, back, state, cpuId;
+    int cpuRemainingTime, cpuRemainingExec, front, back, state, cpuId, ending;
     struct process currentlyRunning;
     struct process *cpuQueue;
 };
@@ -38,6 +38,7 @@ float avgTurnaroundTime;
 int inputProcesses;
 
 void step(struct cpu *processor, int *processesCompleted);
+void challengeStep(struct cpu *processor, int *processesCompleted, int quantum);
 void printRunning(struct process processEntry, int id);
 int calculateSplitCount(int time);
 int calculateSubTime(float time, float numberOfSplits);
