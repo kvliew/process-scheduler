@@ -22,7 +22,7 @@ void step(struct cpu *processor, int *processesCompleted) {
                     // processor has finished a non-parallelisable process
                     (*processesCompleted)++;
                     processesRemaining--;
-                    printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId); //numProcesses - (*processesCompleted)
+                    printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
                     calculatePerformance(processor->currentlyRunning);
                 } else {
                     // processor has finished a subprocess process of a parallelisable process and needs to perform further checks to determine if all subprocesses of a process has finished
@@ -30,7 +30,7 @@ void step(struct cpu *processor, int *processesCompleted) {
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
                         processesRemaining--;
-                        printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
+                        printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
