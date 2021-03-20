@@ -38,7 +38,6 @@ int main(int argc, char **argv) {
                 break;
         }
     }
-    printf("\t\t\t DEBUG %d\n", quantum);
 
     // count processes in file
     numProcesses = 0;
