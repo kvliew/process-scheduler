@@ -13,7 +13,7 @@ CPU States: 0 idle, 1 running
 
 // each processor has its own step function, complete with its own process queue
 void step(struct cpu *processor, int *processesCompleted, struct process *processes) {
-    // CPU is running
+    // CPU RUNNING
     if(processor->state == 1) {
         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
             if(processor->currentlyRunning.timeArrived != -1) {
@@ -64,7 +64,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process *proces
         }
     }
 
-    // CPU is idle
+    // CPU IDLE
     else if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) {
         processor->currentlyRunning = deQueue(processor);
         //printf("\t\t\tHELLO1\n");
@@ -74,6 +74,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process *proces
         processor->state = 1;
     }
 }
+
 void challengeStep(struct cpu *processor, int *processesCompleted, struct process *processes, int quantum) {
     if(processor->state == 1) { // CPU is running a process or subprocess
         if(processor->cpuRemainingExec <= 1) { // just finished a process
