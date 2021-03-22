@@ -149,6 +149,11 @@ int main(int argc, char **argv) {
             }
         }
         // step function for each core
+        /*
+        for(int k=0; k<coreCount; k++) {
+            step(&processors[k], &processesCompleted);
+        }
+        */
         if(quantum == -1) {
             for(int k=0; k<coreCount; k++) {
                 step(&processors[k], &processesCompleted);
