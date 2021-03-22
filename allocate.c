@@ -163,11 +163,11 @@ int main(int argc, char **argv) {
                 step(&processors[k], &processesCompleted, processes);
             }
         } else {
-            /*
+
             for(int k=0; k<coreCount; k++) {
-                challengeStep(&processors[k], &processesCompleted, quantum);
+                challengeStep(&processors[k], &processesCompleted, processes, quantum);
             }
-            */
+
         }
         clock++;
     }

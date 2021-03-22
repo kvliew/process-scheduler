@@ -72,8 +72,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process *proces
         processor->state = 1;
     }
 }
-/*
-void challengeStep(struct cpu *processor, int *processesCompleted, int quantum) {
+void challengeStep(struct cpu *processor, int *processesCompleted, struct process *processes, int quantum) {
     if(processor->state == 1) { // CPU is running a process or subprocess
         if(processor->cpuRemainingExec <= 1) { // just finished a process
             if(processor->ending == 1) { // process/subprocess finished
@@ -102,7 +101,7 @@ void challengeStep(struct cpu *processor, int *processesCompleted, int quantum) 
                 }
                 processor->currentlyRunning.timeArrived = -1; // once a process is completed, 'invalidate' it
                 if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, run the next one in the SAME time step
-                    challengeStep(processor, processesCompleted, quantum);
+                    challengeStep(processor, processesCompleted, processes, quantum);
                 }
 
             } else if(processor->ending == 0) { // quantum finished
@@ -110,7 +109,7 @@ void challengeStep(struct cpu *processor, int *processesCompleted, int quantum) 
                 processor->state = 0;
                 if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, start running the next one in the SAME time step
                     processor->currentlyRunning.timeArrived = -1;
-                    challengeStep(processor, processesCompleted, quantum);
+                    challengeStep(processor, processesCompleted, processes, quantum);
                 }
             }
         } else if(processor->cpuRemainingExec > 1) { // still running a process
@@ -136,7 +135,6 @@ void challengeStep(struct cpu *processor, int *processesCompleted, int quantum) 
         }
     }
 }
-*/
 
 // calculate how many times to split a parallelisable process for the N-Processor Scheduler (largest value of k such that x/k≥1)
 int calculateSplitCount(int time) {
@@ -177,25 +175,4 @@ void calculatePerformance(struct process processEntry) {
     if(newTimeOverhead > maxTimeOverhead) {
         maxTimeOverhead = newTimeOverhead;
     }
-}
-
-// remove
-int isFinishing(struct cpu *processor, struct process *processes) {
-    int finishing = 0;
-    if(processor->state == 1) {
-        if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
-            if(processor->currentlyRunning.timeArrived != -1) {
-                if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
-                    finishing = 1;
-                } else {
-                    printf("\t\t\t###DEBUG cpu_id=%d, %d %d %d %c subprocessesremaining=%d\n", processor->cpuId, processor->currentlyRunning.timeArrived, processor->currentlyRunning.processId, processor->currentlyRunning.executionTime, processor->currentlyRunning.parallelisable, processor->currentlyRunning.subProcessFin);
-                    //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
-                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
-                        finishing = 1;
-                    }
-                }
-            }
-        }
-    }
-    return finishing;
 }
