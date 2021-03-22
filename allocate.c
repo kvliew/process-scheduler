@@ -161,7 +161,6 @@ int main(int argc, char **argv) {
         if(quantum == -1) {
             for(int k=0; k<coreCount; k++) {
                 step(&processors[k], &processesCompleted, processes);
-                printf("\t\t\t###DEBUG %d\n", processes[processors[k].currentlyRunning.subProcessIndex].subProcessFin);
             }
         } else {
 

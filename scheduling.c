@@ -37,6 +37,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process *proces
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
                         processes[processor->currentlyRunning.subProcessIndex].subProcessFin--;
+                        //printf("\t\t\t###DEBUG\t\t2 %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
                     }
                 }
                 processor->state = 0;
