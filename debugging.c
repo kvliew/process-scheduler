@@ -84,7 +84,6 @@ int stepRuns[coreCount];
 for(int i=0; i<coreCount; i++) {
     stepRuns[i] = 0;
 }
-
 if(quantum == -1) {
     for(int k=0; k<coreCount; k++) {
         if(isFinishing(&processors[k]) == 1) {
@@ -102,7 +101,6 @@ if(quantum == -1) {
         challengeStep(&processors[k], &processesCompleted, quantum);
     }
 }
-
 for(int i=0; i<coreCount; i++) {
     stepRuns[i] = 0;
 }

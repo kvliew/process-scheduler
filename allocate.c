@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
     clock = 0;
 
     char c;
+    struct process *processes;
     processes = NULL;
 
     int quantum = -1;
@@ -87,6 +88,7 @@ int main(int argc, char **argv) {
     int temp;
     int fastestId;
 
+
     while(1) {
         // all processes completed
         if(processesCompleted == numProcesses) {
@@ -154,16 +156,19 @@ int main(int argc, char **argv) {
             step(&processors[k], &processesCompleted);
         }
         */
+
+
         if(quantum == -1) {
             for(int k=0; k<coreCount; k++) {
-                step(&processors[k], &processesCompleted);
+                step(&processors[k], &processesCompleted, processes);
             }
         } else {
+            /*
             for(int k=0; k<coreCount; k++) {
                 challengeStep(&processors[k], &processesCompleted, quantum);
             }
+            */
         }
-
         clock++;
     }
 

@@ -12,7 +12,7 @@ CPU States: 0 idle, 1 running
 #include "queue.h"
 
 // each processor has its own step function, complete with its own process queue
-void step(struct cpu *processor, int *processesCompleted) {
+void step(struct cpu *processor, int *processesCompleted, struct process *processes) {
     // CPU is running
     if(processor->state == 1) {
         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
@@ -22,7 +22,7 @@ void step(struct cpu *processor, int *processesCompleted) {
                     // processor has finished a non-parallelisable process
                     (*processesCompleted)++;
                     processesRemaining--;
-                    printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
+                    printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId); //numProcesses - (*processesCompleted)
                     calculatePerformance(processor->currentlyRunning);
                 } else {
                     // processor has finished a subprocess process of a parallelisable process and needs to perform further checks to determine if all subprocesses of a process has finished
@@ -30,7 +30,7 @@ void step(struct cpu *processor, int *processesCompleted) {
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
                         processesRemaining--;
-                        printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
+                        printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
@@ -41,7 +41,7 @@ void step(struct cpu *processor, int *processesCompleted) {
             }
             processor->currentlyRunning.timeArrived = -1;
             if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, start running the next one in the SAME time step
-                step(processor, processesCompleted);
+                step(processor, processesCompleted, processes);
             }
         } else if(processor->cpuRemainingExec > 1) { // CPU is still running a process or subprocess
             if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1)) {
@@ -72,7 +72,7 @@ void step(struct cpu *processor, int *processesCompleted) {
         processor->state = 1;
     }
 }
-
+/*
 void challengeStep(struct cpu *processor, int *processesCompleted, int quantum) {
     if(processor->state == 1) { // CPU is running a process or subprocess
         if(processor->cpuRemainingExec <= 1) { // just finished a process
@@ -136,6 +136,7 @@ void challengeStep(struct cpu *processor, int *processesCompleted, int quantum) 
         }
     }
 }
+*/
 
 // calculate how many times to split a parallelisable process for the N-Processor Scheduler (largest value of k such that x/k≥1)
 int calculateSplitCount(int time) {
@@ -176,4 +177,25 @@ void calculatePerformance(struct process processEntry) {
     if(newTimeOverhead > maxTimeOverhead) {
         maxTimeOverhead = newTimeOverhead;
     }
+}
+
+// remove
+int isFinishing(struct cpu *processor, struct process *processes) {
+    int finishing = 0;
+    if(processor->state == 1) {
+        if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
+            if(processor->currentlyRunning.timeArrived != -1) {
+                if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
+                    finishing = 1;
+                } else {
+                    printf("\t\t\t###DEBUG cpu_id=%d, %d %d %d %c subprocessesremaining=%d\n", processor->cpuId, processor->currentlyRunning.timeArrived, processor->currentlyRunning.processId, processor->currentlyRunning.executionTime, processor->currentlyRunning.parallelisable, processor->currentlyRunning.subProcessFin);
+                    //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
+                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
+                        finishing = 1;
+                    }
+                }
+            }
+        }
+    }
+    return finishing;
 }

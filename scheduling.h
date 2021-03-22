@@ -24,7 +24,7 @@ int processesRemaining;
 int numProcesses;
 int coreCount; // number of processors specified in command line argument
 
-struct process *processes; // process table
+//struct process *processes; // process table
 
 // performance statistics variables
 float turnaroundSummation; // summation of ALL process turnaround times
@@ -37,9 +37,12 @@ float avgTurnaroundTime;
 // queue variables
 int inputProcesses;
 
-void step(struct cpu *processor, int *processesCompleted);
+void step(struct cpu *processor, int *processesCompleted, struct process *processes);
 void challengeStep(struct cpu *processor, int *processesCompleted, int quantum);
 void printRunning(struct process processEntry, int id);
 int calculateSplitCount(int time);
 int calculateSubTime(float time, float numberOfSplits);
 void calculatePerformance(struct process processEntry);
+
+// remove
+int isFinishing(struct cpu *processor, struct process *processes);
