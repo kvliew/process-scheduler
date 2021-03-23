@@ -180,3 +180,23 @@ void calculatePerformance(struct process processEntry) {
         maxTimeOverhead = newTimeOverhead;
     }
 }
+
+int isFinishing(struct cpu *processor, struct process *processes) {
+    int finishing = 0;
+    if(processor->state == 1) {
+        if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
+            if(processor->currentlyRunning.timeArrived != -1) {
+                if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
+                    finishing = 1;
+                } else {
+                    //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
+                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin <= 2) {
+                        finishing = 1;
+                    }
+                }
+            }
+        }
+    }
+
+    return finishing;
+}
