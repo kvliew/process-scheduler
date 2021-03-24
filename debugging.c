@@ -125,3 +125,44 @@ int isFinishing(struct cpu *processor) {
 
     return finishing;
 }
+
+// sorting test
+int exec_dup = 1;
+//qsort(processes, numProcesses, sizeof(struct process), cmp_first);
+for(int k=0; k<numProcesses; k++) {
+    if(processes[k].timeArrived == processes[k+1].timeArrived) {
+        exec_dup++;
+        //printf("k %d exec_dup %d\n", k, exec_dup);
+        if(k == (numProcesses - 1)) {
+            exec_dup--;
+        }
+    }
+    if(processes[k].timeArrived != processes[k+1].timeArrived || (k == (numProcesses - 1))) {
+        if(exec_dup > 1) {
+            //printf("qsort %d %d\n", k-exec_dup+1, exec_dup);
+            qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_first);
+            exec_dup = 1;
+        }
+    }
+}
+// printf("\nPrinting Process Table sorted by exec_time\n");
+// for(int i=0; i<numProcesses; i++) {
+//     printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
+// }
+
+exec_dup = 1;
+for(int k=0; k<numProcesses; k++) {
+    if(processes[k].executionTime == processes[k+1].executionTime) {
+        exec_dup++;
+    } else {
+        if(exec_dup > 1) {
+            //printf("qsort %d %d\n", k-exec_dup+1, exec_dup);
+            qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_second);
+            exec_dup = 1;
+        }
+    }
+}
+// printf("\nPrinting Process Table sorted by id\n");
+// for(int i=0; i<numProcesses; i++) {
+//     printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
+// }
