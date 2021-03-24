@@ -31,21 +31,22 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
                         processesRemaining--;
-                        //printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
+                        // printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
                         printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
                         (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin--;
-                        //printf("\t\t\t###DEBUG\t\t2 %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
+                        //printf("\t%d,CPU[%d] finished SUBPROCESS %d.%d, %d remaining\n", clock, processor->cpuId, processor->currentlyRunning.processId, processor->cpuId, (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin);
                     }
                 }
                 processor->state = 0;
             }
+
             processor->currentlyRunning.timeArrived = -1;
-            if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, start running the next one in the SAME time step
-                step(processor, processesCompleted, processes);
-            }
+            // if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, start running the next one in the SAME time step
+            //     step(processor, processesCompleted, processes);
+            // }
         } else if(processor->cpuRemainingExec > 1) { // CPU is still running a process or subprocess
             if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1)) {
                 // if fastest process in cpu queue is faster than currently running process, interrupt the current process
@@ -187,8 +188,10 @@ int isFinishing(struct cpu *processor, struct process *processes) {
         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
             if(processor->currentlyRunning.timeArrived != -1) {
                 if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
+                    // non-para
                     finishing = 1;
                 } else {
+                    // para
                     //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
                     if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
                         finishing = 1;

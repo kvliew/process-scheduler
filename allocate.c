@@ -77,7 +77,6 @@ int main(int argc, char **argv) {
     }
 
     // SIMULATION LOOP
-
     int splitCount; // stores number of times a parallelisable process is split
     int subTime; // stores the execution time of a subprocess
     int processesCompleted = 0;
@@ -161,30 +160,35 @@ int main(int argc, char **argv) {
         if(quantum == -1) {
             //normal
             for(int k=0; k<coreCount; k++) {
+                //printf("\t%d,Running step function for CPU %d\n", clock, k);
                 step(&processors[k], &processesCompleted, &processes);
             }
 
+            for(int k=0; k<coreCount; k++) {
+                if(processors[k].state == 0) {
+                    step(&processors[k], &processesCompleted, &processes);
+                }
+            }
 
-
-            /*
             // FINISHING loop
             //printf("%d,\t\t\t#DEBUG# Starting FINISHED for-loop\n", clock);
-            for(int k=0; k<coreCount; k++) {
-                if(isFinishing(&processors[k], processes) == 1) {
-                    //printf("\t%d,Running step function for CPU %d FINISHING\n", clock, k);
-                    step(&processors[k], &processesCompleted, &processes);
-                }
-            }
+            // for(int k=0; k<coreCount; k++) {
+            //     if(isFinishing(&processors[k], processes) == 1) {
+            //         //printf("\t%d,Running step function for CPU %d FINISHING\n", clock, k);
+            //         step(&processors[k], &processesCompleted, &processes);
+            //     }
+            // }
+            //
+            // // RUNNING loop
+            // //printf("%d,\t\t\t#DEBUG# Starting RUNNING for-loop\n", clock);
+            // for(int k=0; k<coreCount; k++) {
+            //     if(isFinishing(&processors[k], processes) == 0) {
+            //         //printf("\t%d,Running step function for CPU %d RUNNING\n", clock, k);
+            //         step(&processors[k], &processesCompleted, &processes);
+            //     }
+            // }
 
-            // RUNNING loop
-            //printf("%d,\t\t\t#DEBUG# Starting RUNNING for-loop\n", clock);
-            for(int k=0; k<coreCount; k++) {
-                if(isFinishing(&processors[k], processes) == 0) {
-                    //printf("\t%d,Running step function for CPU %d RUNNING\n", clock, k);
-                    step(&processors[k], &processesCompleted, &processes);
-                }
-            }
-            */
+
 
         } else {
             for(int k=0; k<coreCount; k++) {

@@ -3,4 +3,3 @@ Khin Vyn LIEW
 khinl@student.unimelb.edu.au
 
 Issues
-- For events that occur at the same time step, FINISHED is not printed first
