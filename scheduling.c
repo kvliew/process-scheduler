@@ -21,7 +21,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
                 if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
                     // processor has finished a non-parallelisable process
                     (*processesCompleted)++;
-                    processesRemaining--;
+                    //processesRemaining--;
                     printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
                     //printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId); //numProcesses - (*processesCompleted)
                     calculatePerformance(processor->currentlyRunning);
@@ -30,7 +30,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
                     if((*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
-                        processesRemaining--;
+                        //processesRemaining--;
                         // printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
                         printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                         calculatePerformance(processor->currentlyRunning);

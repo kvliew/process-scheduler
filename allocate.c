@@ -63,6 +63,15 @@ int main(int argc, char **argv) {
         printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
     }*/
 
+    // sort processes array for processes that arrive at the same time
+    // int temp = 0;
+    // int sortPointer = 0;
+    // for(int k=0; k<numProcesses; k++) {
+    //     if(processes[k] == processes[k+1]) {
+    //         temp++;
+    //     }
+    // }
+
     // initialise array of CPUs
     struct cpu processors[coreCount];
     for(int k=0; k<coreCount; k++) {
@@ -156,14 +165,20 @@ int main(int argc, char **argv) {
         }
         */
 
-
+        // non-challenge loop
         if(quantum == -1) {
-            //normal
+            for(int k=0; k<coreCount; k++) {
+                if(isFinishing(&processors[k], processes) == 1) {
+                    processesRemaining--;
+                }
+            }
+
+            // run step function for each processor
             for(int k=0; k<coreCount; k++) {
                 //printf("\t%d,Running step function for CPU %d\n", clock, k);
                 step(&processors[k], &processesCompleted, &processes);
             }
-
+            // additional loop for processors that finished a process, but still have processes in their queues
             for(int k=0; k<coreCount; k++) {
                 if(processors[k].state == 0) {
                     step(&processors[k], &processesCompleted, &processes);
@@ -187,10 +202,8 @@ int main(int argc, char **argv) {
             //         step(&processors[k], &processesCompleted, &processes);
             //     }
             // }
-
-
-
         } else {
+            // challenge
             for(int k=0; k<coreCount; k++) {
                 challengeStep(&processors[k], &processesCompleted, processes, quantum);
             }
