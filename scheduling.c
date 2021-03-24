@@ -12,7 +12,7 @@ CPU States: 0 idle, 1 running
 #include "queue.h"
 
 // each processor has its own step function, complete with its own process queue
-void step(struct cpu *processor, int *processesCompleted, struct process *processes) {
+void step(struct cpu *processor, int *processesCompleted, struct process **processes) {
     // CPU RUNNING
     if(processor->state == 1) {
         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
@@ -27,7 +27,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process *proces
                     calculatePerformance(processor->currentlyRunning);
                 } else {
                     // processor has finished a subprocess process of a parallelisable process and needs to perform further checks to determine if all subprocesses of a process has finished
-                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
+                    if((*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
                         processesRemaining--;
@@ -36,7 +36,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process *proces
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
-                        processes[processor->currentlyRunning.subProcessIndex].subProcessFin--;
+                        (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin--;
                         //printf("\t\t\t###DEBUG\t\t2 %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
                     }
                 }
@@ -190,13 +190,12 @@ int isFinishing(struct cpu *processor, struct process *processes) {
                     finishing = 1;
                 } else {
                     //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
-                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin <= 2) {
+                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
                         finishing = 1;
                     }
                 }
             }
         }
     }
-
     return finishing;
 }

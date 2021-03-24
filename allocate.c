@@ -159,9 +159,33 @@ int main(int argc, char **argv) {
 
 
         if(quantum == -1) {
+            //normal
             for(int k=0; k<coreCount; k++) {
-                step(&processors[k], &processesCompleted, processes);
+                step(&processors[k], &processesCompleted, &processes);
             }
+
+
+
+            /*
+            // FINISHING loop
+            //printf("%d,\t\t\t#DEBUG# Starting FINISHED for-loop\n", clock);
+            for(int k=0; k<coreCount; k++) {
+                if(isFinishing(&processors[k], processes) == 1) {
+                    //printf("\t%d,Running step function for CPU %d FINISHING\n", clock, k);
+                    step(&processors[k], &processesCompleted, &processes);
+                }
+            }
+
+            // RUNNING loop
+            //printf("%d,\t\t\t#DEBUG# Starting RUNNING for-loop\n", clock);
+            for(int k=0; k<coreCount; k++) {
+                if(isFinishing(&processors[k], processes) == 0) {
+                    //printf("\t%d,Running step function for CPU %d RUNNING\n", clock, k);
+                    step(&processors[k], &processesCompleted, &processes);
+                }
+            }
+            */
+
         } else {
             for(int k=0; k<coreCount; k++) {
                 challengeStep(&processors[k], &processesCompleted, processes, quantum);
