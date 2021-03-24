@@ -167,11 +167,11 @@ int main(int argc, char **argv) {
 
         // non-challenge loop
         if(quantum == -1) {
-            for(int k=0; k<coreCount; k++) {
-                if(isFinishing(&processors[k], processes) == 1) {
-                    processesRemaining--;
-                }
-            }
+            // for(int k=0; k<coreCount; k++) {
+            //     if(isFinishing(&processors[k], processes) == 1) {
+            //         processesRemaining--;
+            //     }
+            // }
 
             // run step function for each processor
             for(int k=0; k<coreCount; k++) {
