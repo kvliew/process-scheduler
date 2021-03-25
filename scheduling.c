@@ -22,8 +22,8 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
                     // processor has finished a non-parallelisable process
                     (*processesCompleted)++;
                     processesRemaining--;
-                    //printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
-                    printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId); //numProcesses - (*processesCompleted)
+                    printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
+                    // printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId); //numProcesses - (*processesCompleted)
                     // int temp = (processor->back) + 1;
                     //printf("Printing queue of CPU[%d] size %d\n", processor->cpuId, temp);
                     // for(int i=0; i<temp; i++) {
@@ -36,8 +36,8 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
                         processesRemaining--;
-                        printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
-                        //printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
+                        // printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
+                        printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
