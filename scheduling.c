@@ -248,7 +248,3 @@ int cmp_second(const void *a, const void *b) {
 
     return 1;
 }
-
-
-
-

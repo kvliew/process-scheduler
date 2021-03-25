@@ -19,30 +19,33 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
         //printf("%d,Enqueued %d %d %d %c\n", clock, cpuQueue[*back].timeArrived, cpuQueue[*back].processId, cpuQueue[*back].executionTime, cpuQueue[*back].parallelisable);
 
         // sort queue by execution time
-        sortingPointer = *back;
-        for(int i=0; i<(*back); i++) {
-            if(cpuQueue[sortingPointer].executionTime <= cpuQueue[sortingPointer-1].executionTime) {
-                temp = cpuQueue[sortingPointer-1];
-                cpuQueue[sortingPointer-1] = cpuQueue[sortingPointer];
-                cpuQueue[sortingPointer] = temp;
-                sortingPointer--;
-            } else {
-                break;
-            }
-        }
+        // sortingPointer = *back;
+        // for(int i=0; i<(*back); i++) {
+        //     if(cpuQueue[sortingPointer].executionTime <= cpuQueue[sortingPointer-1].executionTime) {
+        //         temp = cpuQueue[sortingPointer-1];
+        //         cpuQueue[sortingPointer-1] = cpuQueue[sortingPointer];
+        //         cpuQueue[sortingPointer] = temp;
+        //         sortingPointer--;
+        //     } else {
+        //         break;
+        //     }
+        // }
+
+        // using qsort()
+        qsort(cpuQueue, (*back)+1, sizeof(struct process), cmp_first);
 
         // printf("\nPrinting Unsorted Queue\n");
         // for(int i=0; i<numProcesses; i++) {
         //     printf("Process %d: %d %d %d %c\n", i, cpuQueue[i].timeArrived, cpuQueue[i].processId, cpuQueue[i].executionTime, cpuQueue[i].parallelisable);
         // }
 
-        // processes with the same execution time sort queue by process id
+        // for processes with the same execution time, sort by process id
         int exec_dup = 1;
-        for(int k=0; k<numProcesses; k++) {
+        for(int k=0; k<((*back)+1); k++) {
             if(cpuQueue[k].executionTime == cpuQueue[k+1].executionTime) {
                 exec_dup++;
                 //printf("k %d exec_dup %d\n", k, exec_dup);
-                if(k == (numProcesses - 1)) {
+                if(k == (*back)) {
                     exec_dup--;
                 }
             }

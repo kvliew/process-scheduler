@@ -18,6 +18,7 @@ int main(int argc, char **argv) {
     struct process *processes;
     processes = NULL;
     int quantum = -1;
+    processTracker = 0;
 
     // store command line arguments
     while((opt = getopt(argc, argv, "f:p:c")) != -1) {
@@ -193,14 +194,7 @@ int main(int argc, char **argv) {
         }
         */
 
-        // non-challenge loop
         if(quantum == -1) {
-            // for(int k=0; k<coreCount; k++) {
-            //     if(isFinishing(&processors[k], processes) == 1) {
-            //         processesRemaining--;
-            //     }
-            // }
-
             // run step function for each processor
             for(int k=0; k<coreCount; k++) {
                 //printf("\t%d,Running step function for CPU %d\n", clock, k);
@@ -212,24 +206,6 @@ int main(int argc, char **argv) {
                     step(&processors[k], &processesCompleted, &processes);
                 }
             }
-
-            // FINISHING loop
-            //printf("%d,\t\t\t#DEBUG# Starting FINISHED for-loop\n", clock);
-            // for(int k=0; k<coreCount; k++) {
-            //     if(isFinishing(&processors[k], processes) == 1) {
-            //         //printf("\t%d,Running step function for CPU %d FINISHING\n", clock, k);
-            //         step(&processors[k], &processesCompleted, &processes);
-            //     }
-            // }
-            //
-            // // RUNNING loop
-            // //printf("%d,\t\t\t#DEBUG# Starting RUNNING for-loop\n", clock);
-            // for(int k=0; k<coreCount; k++) {
-            //     if(isFinishing(&processors[k], processes) == 0) {
-            //         //printf("\t%d,Running step function for CPU %d RUNNING\n", clock, k);
-            //         step(&processors[k], &processesCompleted, &processes);
-            //     }
-            // }
         } else {
             // challenge
             for(int k=0; k<coreCount; k++) {
