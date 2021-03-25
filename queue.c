@@ -5,8 +5,8 @@
 #include "queue.h"
 
 void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRemainingTime, int *back, int *front) { // sort array by execution time
-    struct process temp;
-    int sortingPointer;
+    // struct process temp;
+    // int sortingPointer;
 
     if(*back != (numProcesses-1)) {
         if(*front == -1) {
