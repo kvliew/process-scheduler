@@ -50,7 +50,7 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
                     exec_dup--;
                 }
             }
-            if(cpuQueue[k].executionTime != cpuQueue[k+1].executionTime || (k == (numProcesses - 1))) {
+            if(cpuQueue[k].executionTime != cpuQueue[k+1].executionTime || (k == (size - 1))) {
                 if(exec_dup > 1) {
                     //printf("qsort %d %d\n", k-exec_dup+1, exec_dup);
                     qsort(&cpuQueue[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_second);
