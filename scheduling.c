@@ -187,26 +187,26 @@ void calculatePerformance(struct process processEntry) {
     }
 }
 
-// int isFinishing(struct cpu *processor, struct process *processes) {
-//     int finishing = 0;
-//     if(processor->state == 1) {
-//         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
-//             if(processor->currentlyRunning.timeArrived != -1) {
-//                 if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
-//                     // non-para
-//                     finishing = 1;
-//                 } else {
-//                     // para
-//                     //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
-//                     if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
-//                         finishing = 1;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-//     return finishing;
-// }
+int isFinishing(struct cpu *processor, struct process *processes) {
+    int finishing = 0;
+    if(processor->state == 1) {
+        if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
+            if(processor->currentlyRunning.timeArrived != -1) {
+                if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
+                    // non-para
+                    finishing = 1;
+                } else {
+                    // para
+                    //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
+                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
+                        finishing = 1;
+                    }
+                }
+            }
+        }
+    }
+    return finishing;
+}
 
 // int cmp_exec(const void *a, const void *b) {
 //     int x;

@@ -9,7 +9,6 @@
 #include "queue.h"
 
 int main(int argc, char **argv) {
-    // command line variables
     FILE *processesFile;
     char *fileName;
     int opt;
@@ -61,7 +60,7 @@ int main(int argc, char **argv) {
     //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].subProcessIndex, processes[i].subProcessFin);
     // }
 
-    //SORT PROCESS TABLE
+    // sort process table
     int exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
         if(processes[k].timeArrived == processes[k+1].timeArrived) {
@@ -83,7 +82,6 @@ int main(int argc, char **argv) {
     // for(int i=0; i<numProcesses; i++) {
     //     printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
     // }
-
     exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
         if(processes[k].executionTime == processes[k+1].executionTime && processes[k].timeArrived == processes[k+1].timeArrived) {
@@ -122,7 +120,7 @@ int main(int argc, char **argv) {
         processors[k].cpuId = k;
     }
 
-    // SIMULATION LOOP
+    // simulation variables
     int splitCount; // stores number of times a parallelisable process is split
     int subTime; // stores the execution time of a subprocess
     int processesCompleted = 0;
@@ -133,7 +131,9 @@ int main(int argc, char **argv) {
     int temp;
     int fastestId;
 
+    int numFin = 0;
 
+    // simulation loop
     while(1) {
         // all processes completed
         if(processesCompleted == numProcesses) {
@@ -203,6 +203,13 @@ int main(int argc, char **argv) {
         */
 
         if(quantum == -1) {
+            // for(int k=0; k<coreCount; k++) {
+            //     if(isFinishing(&processors[k], processes) == 1) {
+            //         numFin++;
+            //         processesRemaining--;
+            //     }
+            // }
+            // printf("%d,procs_finishing=%d\n", clock, numFin);
             // run step function for each processor
             for(int k=0; k<coreCount; k++) {
                 //printf("\t%d,Running step function for CPU %d\n", clock, k);
@@ -221,12 +228,14 @@ int main(int argc, char **argv) {
             }
         }
         clock++;
+        numFin = 0;
         // printf("%d,\t\t%d %d\n", clock, processesCompleted, numProcesses);
     }
 
-    // print performance statistics here
+    // print performance statistics
     printf("Turnaround time %.0f\nTime overhead %.2f %.2f\nMakespan %d\n", ceil(turnaroundSummation/processesCompleted), maxTimeOverhead, overheadSummation/processesCompleted, (clock-1));
 
+    // free mallocs
     for(int k=0; k<coreCount; k++) {
         free(processors[k].cpuQueue);
     }
