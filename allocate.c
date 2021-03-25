@@ -73,20 +73,20 @@ int main(int argc, char **argv) {
         }
         if(processes[k].timeArrived != processes[k+1].timeArrived || (k == (numProcesses - 1))) {
             if(exec_dup > 1) {
-                //printf("qsort %d %d\n", k-exec_dup+1, exec_dup);
+                // printf("\nqsort %d %d\n", k-exec_dup+1, exec_dup);
                 qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_first);
                 exec_dup = 1;
             }
         }
     }
-    // printf("\nPrinting Process Table sorted by exec_time\n");
+    // printf("Printing Process Table sorted by exec_time\n");
     // for(int i=0; i<numProcesses; i++) {
     //     printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
     // }
 
     exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
-        if(processes[k].executionTime == processes[k+1].executionTime) {
+        if(processes[k].executionTime == processes[k+1].executionTime && processes[k].timeArrived == processes[k+1].timeArrived) {
             exec_dup++;
             if(k == (numProcesses - 1)) {
                 exec_dup--;
@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
         }
         if(processes[k].executionTime != processes[k+1].executionTime || (k == (numProcesses - 1))) {
             if(exec_dup > 1) {
-                //printf("qsort %d %d\n", k-exec_dup+1, exec_dup);
+                // printf("\nqsort %d %d\n", k-exec_dup+1, exec_dup);
                 qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_second);
                 exec_dup = 1;
             }
@@ -103,9 +103,9 @@ int main(int argc, char **argv) {
     for(int i=0; i<numProcesses; i++) {
         processes[i].subProcessIndex = i;
     }
-    // printf("\nPrinting Process Table sorted by id\n");
+    // printf("Printing Process Table sorted by id\n");
     // for(int i=0; i<numProcesses; i++) {
-    //     //printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
+    //     // printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
     //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].subProcessIndex, processes[i].subProcessFin);
     // }
 
