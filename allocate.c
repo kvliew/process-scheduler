@@ -61,7 +61,7 @@ int main(int argc, char **argv) {
     //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].subProcessIndex, processes[i].subProcessFin);
     // }
 
-    // SORT PROCESS TABLE
+    //SORT PROCESS TABLE
     int exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
         if(processes[k].timeArrived == processes[k+1].timeArrived) {
@@ -88,10 +88,14 @@ int main(int argc, char **argv) {
     for(int k=0; k<numProcesses; k++) {
         if(processes[k].executionTime == processes[k+1].executionTime) {
             exec_dup++;
-        } else {
+            if(k == (numProcesses - 1)) {
+                exec_dup--;
+            }
+        }
+        if(processes[k].timeArrived != processes[k+1].timeArrived || (k == (numProcesses - 1))) {
             if(exec_dup > 1) {
                 //printf("qsort %d %d\n", k-exec_dup+1, exec_dup);
-                qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_second);
+                qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_first);
                 exec_dup = 1;
             }
         }
