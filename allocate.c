@@ -58,10 +58,10 @@ int main(int argc, char **argv) {
 
     // printf("Printing Original Process Table\n");
     // for(int i=0; i<numProcesses; i++) {
-    //     printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
+    //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].subProcessIndex, processes[i].subProcessFin);
     // }
 
-    // sorting test
+    // SORT PROCESS TABLE
     int exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
         if(processes[k].timeArrived == processes[k+1].timeArrived) {
@@ -96,9 +96,13 @@ int main(int argc, char **argv) {
             }
         }
     }
+    for(int i=0; i<numProcesses; i++) {
+        processes[i].subProcessIndex = i;
+    }
     // printf("\nPrinting Process Table sorted by id\n");
     // for(int i=0; i<numProcesses; i++) {
-    //     printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
+    //     //printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
+    //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].subProcessIndex, processes[i].subProcessFin);
     // }
 
     // initialise array of CPUs
@@ -213,6 +217,7 @@ int main(int argc, char **argv) {
             }
         }
         clock++;
+        // printf("%d,\t\t%d %d\n", clock, processesCompleted, numProcesses);
     }
 
     // print performance statistics here

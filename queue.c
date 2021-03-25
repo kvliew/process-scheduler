@@ -41,11 +41,12 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
 
         // for processes with the same execution time, sort by process id
         int exec_dup = 1;
-        for(int k=0; k<((*back)+1); k++) {
+        int size = (*back) + 1;
+        for(int k=0; k<size; k++) {
             if(cpuQueue[k].executionTime == cpuQueue[k+1].executionTime) {
                 exec_dup++;
                 //printf("k %d exec_dup %d\n", k, exec_dup);
-                if(k == (*back)) {
+                if(k == size - 1) {
                     exec_dup--;
                 }
             }
@@ -61,13 +62,12 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
         // for(int i=0; i<numProcesses; i++) {
         //     printf("Process %d: %d %d %d %c\n", i, cpuQueue[i].timeArrived, cpuQueue[i].processId, cpuQueue[i].executionTime, cpuQueue[i].parallelisable);
         // }
-
+        //
         // print queue
-        /*
-        printf("\t\t\tPRINTING QUEUE...\n");
-        for(int i=0; i<numProcesses; i++) {
-            printf("%d,\t\t\t###DEBUG###\t %d %d %d %c\n", clock, cpuQueue[i].timeArrived, cpuQueue[i].processId, cpuQueue[i].executionTime, cpuQueue[i].parallelisable);
-        }*/
+        // printf("\t\t\tPRINTING QUEUE...\n");
+        // for(int i=0; i<numProcesses; i++) {
+        //     printf("%d,\t\t\t###DEBUG###\t %d %d %d %c\n", clock, cpuQueue[i].timeArrived, cpuQueue[i].processId, cpuQueue[i].executionTime, cpuQueue[i].parallelisable);
+        // }
     }
 }
 
