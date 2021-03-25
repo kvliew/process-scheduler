@@ -18,7 +18,7 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
         (*cpuRemainingTime) += processEntry.executionTime;
         //printf("%d,Enqueued %d %d %d %c\n", clock, cpuQueue[*back].timeArrived, cpuQueue[*back].processId, cpuQueue[*back].executionTime, cpuQueue[*back].parallelisable);
 
-        // sort the array by execution time
+        // sort queue by execution time
         sortingPointer = *back;
         for(int i=0; i<(*back); i++) {
             if(cpuQueue[sortingPointer].executionTime <= cpuQueue[sortingPointer-1].executionTime) {
@@ -30,6 +30,34 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
                 break;
             }
         }
+
+        // printf("\nPrinting Unsorted Queue\n");
+        // for(int i=0; i<numProcesses; i++) {
+        //     printf("Process %d: %d %d %d %c\n", i, cpuQueue[i].timeArrived, cpuQueue[i].processId, cpuQueue[i].executionTime, cpuQueue[i].parallelisable);
+        // }
+
+        // processes with the same execution time sort queue by process id
+        int exec_dup = 1;
+        for(int k=0; k<numProcesses; k++) {
+            if(cpuQueue[k].executionTime == cpuQueue[k+1].executionTime) {
+                exec_dup++;
+                //printf("k %d exec_dup %d\n", k, exec_dup);
+                if(k == (numProcesses - 1)) {
+                    exec_dup--;
+                }
+            }
+            if(cpuQueue[k].executionTime != cpuQueue[k+1].executionTime || (k == (numProcesses - 1))) {
+                if(exec_dup > 1) {
+                    //printf("qsort %d %d\n", k-exec_dup+1, exec_dup);
+                    qsort(&cpuQueue[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_second);
+                    exec_dup = 1;
+                }
+            }
+        }
+        // printf("\nPrinting Queue sorted by id\n");
+        // for(int i=0; i<numProcesses; i++) {
+        //     printf("Process %d: %d %d %d %c\n", i, cpuQueue[i].timeArrived, cpuQueue[i].processId, cpuQueue[i].executionTime, cpuQueue[i].parallelisable);
+        // }
 
         // print queue
         /*
