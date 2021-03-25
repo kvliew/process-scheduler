@@ -21,7 +21,9 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
                 if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
                     // processor has finished a non-parallelisable process
                     (*processesCompleted)++;
-                    processesRemaining--;
+
+                    // processesRemaining--;
+
                     printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
                     // printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId); //numProcesses - (*processesCompleted)
                     // int temp = (processor->back) + 1;
@@ -35,14 +37,20 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
                     if((*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
-                        processesRemaining--;
-                        // printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
+                        (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin = -1;
+
+                        // processesRemaining--;
+
+                        // printf("%d,FINISHED LAST SUB,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
                         printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
-                        (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin--;
-                        //printf("\t%d,CPU[%d] finished SUBPROCESS %d.%d, %d remaining\n", clock, processor->cpuId, processor->currentlyRunning.processId, processor->cpuId, (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin);
+
+                        // (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin--;
+
+                        // printf("\t%d,CPU[%d] finished SUBPROCESS %d.%d, %d remaining\n", clock, processor->cpuId, processor->currentlyRunning.processId, processor->cpuId, (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin);
+                        // printf("%d,CPU[%d]here1 %d\n", clock, processor->cpuId, (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin);
                     }
                 }
                 processor->state = 0;
@@ -56,29 +64,32 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
             if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1)) {
                 // if fastest process in cpu queue is faster than currently running process, interrupt the current process
                 processor->currentlyRunning.executionTime--;
+                // printf("%d,\t\t\tInterrupt CPU[%d] enqueuing %d %d %d %c\n", clock, processor->cpuId, processor->currentlyRunning.timeArrived, processor->currentlyRunning.processId, processor->currentlyRunning.executionTime, processor->currentlyRunning.parallelisable);
                 enQueue(processor->cpuQueue, processor->currentlyRunning, &processor->cpuRemainingTime, &processor->back, &processor->front);
                 processor->currentlyRunning = deQueue(processor);
                 processor->cpuRemainingExec = processor->currentlyRunning.executionTime;
-                // printf("%d,\t\t\tInterrupt\n", clock);
                 printRunning(processor->currentlyRunning, processor->cpuId);
             } else {
                 // continue running process
                 processor->currentlyRunning.executionTime--;
                 processor->cpuRemainingExec--;
                 processor->cpuRemainingTime--;
-                //printf("%d,CPU[%d] running process %d\tTotal remaining time %d\n", clock, processor->cpuId, processor->currentlyRunning.processId, processor->cpuRemainingTime);
+                // printf("%d,CPU[%d] running process %d\tTotal remaining time %d, exec_time=%d\n", clock, processor->cpuId, processor->currentlyRunning.processId, processor->cpuRemainingTime, processor->cpuRemainingExec);
             }
         }
     }
 
     // CPU IDLE
     else if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) {
+        // printf("%d,dequeuing CPU[%d]\n", clock, processor->cpuId);
         processor->currentlyRunning = deQueue(processor);
-        //printf("\t\t\tHELLO1\n");
         //processor->cpuRemainingTime += processor->currentlyRunning.executionTime;
         processor->cpuRemainingExec = processor->currentlyRunning.executionTime;
         printRunning(processor->currentlyRunning, processor->cpuId);
         processor->state = 1;
+    }
+    else {
+        // printf("%d,CPU[%d] queue is empty\n", clock, processor->cpuId);
     }
 }
 
@@ -187,7 +198,7 @@ void calculatePerformance(struct process processEntry) {
     }
 }
 
-int isFinishing(struct cpu *processor, struct process *processes) {
+int isFinishing(struct cpu *processor, struct process **processes) {
     int finishing = 0;
     if(processor->state == 1) {
         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
@@ -198,8 +209,11 @@ int isFinishing(struct cpu *processor, struct process *processes) {
                 } else {
                     // para
                     //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
-                    if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
+                    if((*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
                         finishing = 1;
+                    } else {
+                        (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin--;
+                        printf("%d,\t\tCPU[%d]here1 %d exec_rem=%d\n", clock, processor->cpuId, (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin, processor->cpuRemainingExec);
                     }
                 }
             }
