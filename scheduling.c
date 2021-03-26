@@ -59,7 +59,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
             //     step(processor, processesCompleted, processes);
             // }
         } else if(processor->cpuRemainingExec > 1) { // CPU is still running a process or subprocess
-            if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1) && (cFlag == 0)) {
+            if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1)) {
                 // if fastest process in cpu queue is faster than currently running process, interrupt the current process
                 processor->currentlyRunning.executionTime--;
                 // printf("%d,\t\t\tInterrupt CPU[%d] enqueuing %d %d %d %c\n", clock, processor->cpuId, processor->currentlyRunning.timeArrived, processor->currentlyRunning.processId, processor->currentlyRunning.executionTime, processor->currentlyRunning.parallelisable);
@@ -91,7 +91,8 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
     }
 }
 
-void challengeStep(struct cpu *processor, int *processesCompleted, struct process *processes, int quantum) {
+void challengeStep(struct cpu *processor, int *processesCompleted, struct process **processes, int quantum) {
+    // CPU RUNNING
     if(processor->state == 1) { // CPU is running a process or subprocess
         if(processor->cpuRemainingExec <= 1) { // just finished a process
             if(processor->ending == 1) { // process/subprocess finished
@@ -100,36 +101,36 @@ void challengeStep(struct cpu *processor, int *processesCompleted, struct proces
                     if(strcmp(&processor->currentlyRunning.parallelisable, "n") == 0) {
                         // processor has finished a non-parallelisable process
                         (*processesCompleted)++;
-                        processesRemaining--;
+                        // processesRemaining--;
                         printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processer has finished a parallelisable process and needs to perform further checks to determine if all subprocesses of a process has finished
-                        if(processes[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
+                        if((*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin == 1 && (numFin > 0)) {
                             // processor has finished all subprocesses of a process
                             (*processesCompleted)++;
-                            processesRemaining--;
+                            // processesRemaining--;
                             printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                             calculatePerformance(processor->currentlyRunning);
                         } else {
                             // processor has finished a subprocess of a process, but more to be finished
-                            processes[processor->currentlyRunning.subProcessIndex].subProcessFin--;
+                            // processes[processor->currentlyRunning.subProcessIndex].subProcessFin--;
                         }
                     }
                     processor->state = 0;
                 }
                 processor->currentlyRunning.timeArrived = -1; // once a process is completed, 'invalidate' it
-                if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, run the next one in the SAME time step
-                    challengeStep(processor, processesCompleted, processes, quantum);
-                }
+                // if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, run the next one in the SAME time step
+                //     challengeStep(processor, processesCompleted, processes, quantum);
+                // }
 
             } else if(processor->ending == 0) { // quantum finished
                 enQueue(processor->cpuQueue, processor->currentlyRunning, &processor->cpuRemainingTime, &processor->back, &processor->front);
                 processor->state = 0;
-                if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, start running the next one in the SAME time step
-                    processor->currentlyRunning.timeArrived = -1;
-                    challengeStep(processor, processesCompleted, processes, quantum);
-                }
+                // if((processor->front != -1) && (processor->back != -1)) { // if there are item(s) in the the waiting queue, start running the next one in the SAME time step
+                //     processor->currentlyRunning.timeArrived = -1;
+                //     challengeStep(processor, processesCompleted, processes, quantum);
+                // }
             }
         } else if(processor->cpuRemainingExec > 1) { // still running a process
             processor->currentlyRunning.executionTime--;
@@ -138,6 +139,7 @@ void challengeStep(struct cpu *processor, int *processesCompleted, struct proces
         }
     }
 
+    // CPU IDLE
     else if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) {
         processor->currentlyRunning = deQueue(processor);
         //printf("\t\t\tHELLO1\n");

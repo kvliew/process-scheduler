@@ -16,7 +16,7 @@ int main(int argc, char **argv) {
     char c;
     struct process *processes;
     processes = NULL;
-    // int quantum = -1;
+    int quantum = -1;
     int processTracker = 0;
     cFlag = 0; // 0 for non-challenge tasks, 1 for challenge tasks
 
@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
                 coreCount = atoi(optarg);
                 break;
             case 'c': // challenge task
-                // quantum = 60;
+                quantum = 60;
                 cFlag = 1;
                 break;
         }
@@ -214,13 +214,21 @@ int main(int argc, char **argv) {
         // run step function for each processor
         for(int k=0; k<coreCount; k++) {
             // printf("\t%d,Running step function for CPU %d rem_exec=%d\n", clock, k, processors[k].cpuRemainingExec);
-            step(&processors[k], &processesCompleted, &processes);
+            if(cFlag == 0) {
+                step(&processors[k], &processesCompleted, &processes);
+            } else {
+                challengeStep(&processors[k], &processesCompleted, &processes, quantum);
+            }
         }
         // additional loop for processors that finished a process, but still have processes in their queues
         for(int k=0; k<coreCount; k++) {
             if(processors[k].state == 0) {
                 // printf("\t%d,alt loop CPU %d, state=%d, exec_time_rem=%d\n", clock, k, processors[k].state, processors[k].cpuRemainingExec);
-                step(&processors[k], &processesCompleted, &processes);
+                if(cFlag == 0) {
+                    step(&processors[k], &processesCompleted, &processes);
+                } else {
+                    challengeStep(&processors[k], &processesCompleted, &processes, quantum);
+                }
             }
         }
 

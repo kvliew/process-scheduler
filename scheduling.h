@@ -42,7 +42,7 @@ float avgTurnaroundTime;
 // int inputProcesses;
 
 void step(struct cpu *processor, int *processesCompleted, struct process **processes);
-void challengeStep(struct cpu *processor, int *processesCompleted, struct process *processes, int quantum);
+void challengeStep(struct cpu *processor, int *processesCompleted, struct process **processes, int quantum);
 void printRunning(struct process processEntry, int id);
 int calculateSplitCount(int time);
 int calculateSubTime(float time, float numberOfSplits);
