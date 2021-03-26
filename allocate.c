@@ -73,7 +73,7 @@ int main(int argc, char **argv) {
         if(processes[k].timeArrived != processes[k+1].timeArrived || (k == (numProcesses - 1))) {
             if(exec_dup > 1) {
                 // printf("\nqsort %d %d\n", k-exec_dup+1, exec_dup);
-                qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_first);
+                qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmpTimeArrivedExecTime);
                 exec_dup = 1;
             }
         }
@@ -93,7 +93,7 @@ int main(int argc, char **argv) {
         if(processes[k].executionTime != processes[k+1].executionTime || (k == (numProcesses - 1))) {
             if(exec_dup > 1) {
                 // printf("\nqsort %d %d\n", k-exec_dup+1, exec_dup);
-                qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_second);
+                qsort(&processes[k-exec_dup+1], exec_dup, sizeof(struct process), cmpExecTimeProcessId);
                 exec_dup = 1;
             }
         }

@@ -48,5 +48,5 @@ int calculateSubTime(float time, float numberOfSplits);
 void calculatePerformance(struct process processEntry);
 int isFinishing(struct cpu *processor, struct process **processes);
 // int cmp_exec(const void *a, const void *b);
-int cmp_first(const void *a, const void *b);
-int cmp_second(const void *a, const void *b);
+int cmpTimeArrivedExecTime(const void *a, const void *b);
+int cmpExecTimeProcessId(const void *a, const void *b);

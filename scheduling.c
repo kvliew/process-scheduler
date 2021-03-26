@@ -220,25 +220,7 @@ int isFinishing(struct cpu *processor, struct process **processes) {
     return finishing;
 }
 
-// int cmp_exec(const void *a, const void *b) {
-//     int x;
-//     struct process const *ia = a;
-//     struct process const *ib = b;
-//
-//     if(ia->timeArrived == ib->timeArrived) {
-//         x = 0;
-//     } else {
-//         x = 1;
-//     }
-//
-//     if(x == 0) {
-//         return ia->executionTime > ib->executionTime;
-//     }
-//
-//     return x;
-// }
-
-int cmp_first(const void *a, const void *b) {
+int cmpTimeArrivedExecTime(const void *a, const void *b) {
     struct process const *ia = a;
     struct process const *ib = b;
 
@@ -252,7 +234,7 @@ int cmp_first(const void *a, const void *b) {
     return 1;
 }
 
-int cmp_second(const void *a, const void *b) {
+int cmpExecTimeProcessId(const void *a, const void *b) {
     struct process const *ia = a;
     struct process const *ib = b;
 
