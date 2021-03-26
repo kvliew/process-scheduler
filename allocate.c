@@ -32,7 +32,7 @@ int main(int argc, char **argv) {
                 coreCount = atoi(optarg);
                 break;
             case 'c': // challenge task
-                quantum = 20;
+                quantum = 5;
                 cFlag = 1;
                 break;
         }
