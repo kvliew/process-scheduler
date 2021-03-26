@@ -23,6 +23,7 @@ int clock;
 int processesRemaining;
 int coreCount; // number of processors specified in command line argument
 int numProcesses;
+int cFlag;
 
 // global variables removed
 // int processTracker;

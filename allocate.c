@@ -16,8 +16,9 @@ int main(int argc, char **argv) {
     char c;
     struct process *processes;
     processes = NULL;
-    int quantum = -1;
+    // int quantum = -1;
     int processTracker = 0;
+    cFlag = 0; // 0 for non-challenge tasks, 1 for challenge tasks
 
     // store command line arguments
     while((opt = getopt(argc, argv, "f:p:c")) != -1) {
@@ -31,7 +32,8 @@ int main(int argc, char **argv) {
                 coreCount = atoi(optarg);
                 break;
             case 'c': // challenge task
-                quantum = 60;
+                // quantum = 60;
+                cFlag = 1;
                 break;
         }
     }
@@ -202,32 +204,52 @@ int main(int argc, char **argv) {
         }
         */
 
-        if(quantum == -1) {
-            for(int k=0; k<coreCount; k++) {
-                if(isFinishing(&processors[k], &processes) == 1) {
-                    numFin++;
-                    processesRemaining--;
-                }
-            }
-            // printf("%d,procs_finishing=%d\n", clock, numFin);
-            // run step function for each processor
-            for(int k=0; k<coreCount; k++) {
-                // printf("\t%d,Running step function for CPU %d rem_exec=%d\n", clock, k, processors[k].cpuRemainingExec);
-                step(&processors[k], &processesCompleted, &processes);
-            }
-            // additional loop for processors that finished a process, but still have processes in their queues
-            for(int k=0; k<coreCount; k++) {
-                if(processors[k].state == 0) {
-                    // printf("\t%d,alt loop CPU %d, state=%d, exec_time_rem=%d\n", clock, k, processors[k].state, processors[k].cpuRemainingExec);
-                    step(&processors[k], &processesCompleted, &processes);
-                }
-            }
-        } else {
-            // challenge
-            for(int k=0; k<coreCount; k++) {
-                challengeStep(&processors[k], &processesCompleted, processes, quantum);
+        for(int k=0; k<coreCount; k++) {
+            if(isFinishing(&processors[k], &processes) == 1) {
+                numFin++;
+                processesRemaining--;
             }
         }
+        // printf("%d,procs_finishing=%d\n", clock, numFin);
+        // run step function for each processor
+        for(int k=0; k<coreCount; k++) {
+            // printf("\t%d,Running step function for CPU %d rem_exec=%d\n", clock, k, processors[k].cpuRemainingExec);
+            step(&processors[k], &processesCompleted, &processes);
+        }
+        // additional loop for processors that finished a process, but still have processes in their queues
+        for(int k=0; k<coreCount; k++) {
+            if(processors[k].state == 0) {
+                // printf("\t%d,alt loop CPU %d, state=%d, exec_time_rem=%d\n", clock, k, processors[k].state, processors[k].cpuRemainingExec);
+                step(&processors[k], &processesCompleted, &processes);
+            }
+        }
+
+        // if(quantum == -1) {
+        //     for(int k=0; k<coreCount; k++) {
+        //         if(isFinishing(&processors[k], &processes) == 1) {
+        //             numFin++;
+        //             processesRemaining--;
+        //         }
+        //     }
+        //     // printf("%d,procs_finishing=%d\n", clock, numFin);
+        //     // run step function for each processor
+        //     for(int k=0; k<coreCount; k++) {
+        //         // printf("\t%d,Running step function for CPU %d rem_exec=%d\n", clock, k, processors[k].cpuRemainingExec);
+        //         step(&processors[k], &processesCompleted, &processes);
+        //     }
+        //     // additional loop for processors that finished a process, but still have processes in their queues
+        //     for(int k=0; k<coreCount; k++) {
+        //         if(processors[k].state == 0) {
+        //             // printf("\t%d,alt loop CPU %d, state=%d, exec_time_rem=%d\n", clock, k, processors[k].state, processors[k].cpuRemainingExec);
+        //             step(&processors[k], &processesCompleted, &processes);
+        //         }
+        //     }
+        // } else {
+        //     // challenge
+        //     for(int k=0; k<coreCount; k++) {
+        //         challengeStep(&processors[k], &processesCompleted, processes, quantum);
+        //     }
+        // }
         clock++;
         numFin = 0;
         // printf("%d,\t\t%d %d\n", clock, processesCompleted, numProcesses);
