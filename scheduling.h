@@ -18,6 +18,7 @@ currentlyRunning: process or subprocess cpu is currently running
 cpuQueue: array of all unfinished processes and subprocesses assigned to CPU
 */
 
+int numFin;
 int clock;
 int processTracker;
 int processesRemaining;
@@ -43,7 +44,7 @@ void printRunning(struct process processEntry, int id);
 int calculateSplitCount(int time);
 int calculateSubTime(float time, float numberOfSplits);
 void calculatePerformance(struct process processEntry);
-int isFinishing(struct cpu *processor, struct process *processes);
+int isFinishing(struct cpu *processor, struct process **processes);
 // int cmp_exec(const void *a, const void *b);
 int cmp_first(const void *a, const void *b);
 int cmp_second(const void *a, const void *b);

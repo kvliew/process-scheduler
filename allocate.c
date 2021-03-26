@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
     int temp;
     int fastestId;
 
-    // int numFin = 0;
+    numFin = 0;
 
     // simulation loop
     while(1) {
@@ -203,21 +203,22 @@ int main(int argc, char **argv) {
         */
 
         if(quantum == -1) {
-            // for(int k=0; k<coreCount; k++) {
-            //     if(isFinishing(&processors[k], processes) == 1) {
-            //         numFin++;
-            //         processesRemaining--;
-            //     }
-            // }
+            for(int k=0; k<coreCount; k++) {
+                if(isFinishing(&processors[k], &processes) == 1) {
+                    numFin++;
+                    processesRemaining--;
+                }
+            }
             // printf("%d,procs_finishing=%d\n", clock, numFin);
             // run step function for each processor
             for(int k=0; k<coreCount; k++) {
-                //printf("\t%d,Running step function for CPU %d\n", clock, k);
+                // printf("\t%d,Running step function for CPU %d rem_exec=%d\n", clock, k, processors[k].cpuRemainingExec);
                 step(&processors[k], &processesCompleted, &processes);
             }
             // additional loop for processors that finished a process, but still have processes in their queues
             for(int k=0; k<coreCount; k++) {
                 if(processors[k].state == 0) {
+                    // printf("\t%d,alt loop CPU %d, state=%d, exec_time_rem=%d\n", clock, k, processors[k].state, processors[k].cpuRemainingExec);
                     step(&processors[k], &processesCompleted, &processes);
                 }
             }
@@ -228,7 +229,7 @@ int main(int argc, char **argv) {
             }
         }
         clock++;
-        // numFin = 0;
+        numFin = 0;
         // printf("%d,\t\t%d %d\n", clock, processesCompleted, numProcesses);
     }
 
