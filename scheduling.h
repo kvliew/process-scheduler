@@ -18,6 +18,7 @@ currentlyRunning: process or subprocess cpu is currently running
 cpuQueue: array of all unfinished processes and subprocesses assigned to CPU
 */
 
+int numFin;
 int clock;
 int processTracker;
 int processesRemaining;
