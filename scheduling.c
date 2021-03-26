@@ -24,8 +24,8 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
 
                     // processesRemaining--;
 
-                    printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
-                    // printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId); //numProcesses - (*processesCompleted)
+                    // printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining); //numProcesses - (*processesCompleted)
+                    printf("%d,FINISHED,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId); //numProcesses - (*processesCompleted)
                     // int temp = (processor->back) + 1;
                     //printf("Printing queue of CPU[%d] size %d\n", processor->cpuId, temp);
                     // for(int i=0; i<temp; i++) {
@@ -38,11 +38,9 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
                         // processor has finished all subprocesses of a process
                         (*processesCompleted)++;
                         (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin = -1;
-
                         // processesRemaining--;
-
-                        // printf("%d,FINISHED LAST SUB,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
-                        printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
+                        printf("%d,FINISHED LAST SUB,pid=%d,proc_remaining=%d,cpu_id=%d\n", clock, processor->currentlyRunning.processId, processesRemaining, processor->cpuId);
+                        // printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                         calculatePerformance(processor->currentlyRunning);
                     } else {
                         // processor has finished a subprocess of a process, but more to be finished
@@ -207,13 +205,13 @@ int isFinishing(struct cpu *processor, struct process **processes) {
                     // non-para
                     finishing = 1;
                 } else {
-                    // para
+                    // cpu finished subprocess
                     //printf("\t\t\t###DEBUG %d\n", processes[processor->currentlyRunning.subProcessIndex].subProcessFin);
-                    if((*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) {
+                    if((*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin == 1) { // cpu finished final subprocess
                         finishing = 1;
-                    } else {
+                    } else { // cpu finished non-final subprocess
                         (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin--;
-                        printf("%d,\t\tCPU[%d]here1 %d exec_rem=%d\n", clock, processor->cpuId, (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin, processor->cpuRemainingExec);
+                        printf("%d,\t\tCPU[%d] curr_running_subprocessFin=%d exec_rem=%d\n", clock, processor->cpuId, (*processes)[processor->currentlyRunning.subProcessIndex].subProcessFin, processor->cpuRemainingExec);
                     }
                 }
             }
