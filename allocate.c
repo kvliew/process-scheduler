@@ -12,10 +12,12 @@ int main(int argc, char **argv) {
     FILE *processesFile;
     char *fileName;
     int opt;
-    clock = 0;
     char c;
+
     struct process *processes;
     processes = NULL;
+
+    clock = 0;
     int quantum = -1;
     int processTracker = 0;
     cFlag = 0; // 0 for non-challenge tasks, 1 for challenge tasks
@@ -31,7 +33,7 @@ int main(int argc, char **argv) {
             case 'p':
                 coreCount = atoi(optarg);
                 break;
-            case 'c': // challenge task
+            case 'c':
                 quantum = 100;
                 cFlag = 1;
                 break;
@@ -57,11 +59,6 @@ int main(int argc, char **argv) {
         processes[i].subProcessFin = 9999;
     }
 
-    // printf("Printing Original Process Table\n");
-    // for(int i=0; i<numProcesses; i++) {
-    //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].processTableIndex, processes[i].subProcessFin);
-    // }
-
     // sort process table
     int exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
@@ -80,10 +77,6 @@ int main(int argc, char **argv) {
             }
         }
     }
-    // printf("Printing Process Table sorted by exec_time\n");
-    // for(int i=0; i<numProcesses; i++) {
-    //     printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
-    // }
     exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
         if(processes[k].executionTime == processes[k+1].executionTime && processes[k].timeArrived == processes[k+1].timeArrived) {
@@ -103,11 +96,6 @@ int main(int argc, char **argv) {
     for(int i=0; i<numProcesses; i++) {
         processes[i].processTableIndex = i;
     }
-    // printf("Printing Process Table sorted by id\n");
-    // for(int i=0; i<numProcesses; i++) {
-    //     // printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
-    //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].processTableIndex, processes[i].subProcessFin);
-    // }
 
     // initialise array of CPUs
     struct cpu processors[coreCount];
@@ -122,17 +110,11 @@ int main(int argc, char **argv) {
         processors[k].cpuId = k;
     }
 
-    // simulation variables
-    int splitCount; // stores number of times a parallelisable process is split
-    int subTime; // stores the execution time of a subprocess
+    int splitCount; // stores number of times a parallelisable process is to be split
+    int subTime; // stores the execution time of a sub-process
     int processesCompleted = 0;
     int shortestId = 0; // id of CPU with smallest amount of remaining execution time (fastest processor)
     int shortestRemTime = 9999; // execution time of the fastest processor
-
-    // Np Para
-    int temp;
-    int fastestId;
-
     numFin = 0;
 
     // simulation loop
@@ -146,19 +128,16 @@ int main(int argc, char **argv) {
         if((processes[processTracker].timeArrived == clock) && (processTracker < numProcesses)) {
             while(1) {
                 if(strcmp(&processes[processTracker].parallelisable, "n") == 0 || coreCount == 1) {
-                    // allocate process to the fastest processor, no splitting occurs
+                    // allocate non-parallelisable process to the fastest processor, no splitting occurs
+                    shortestId = 0;
+                    shortestRemTime = processors[0].cpuRemainingTime;
                     for(int j=0; j<coreCount; j++) {
                         if(processors[j].cpuRemainingTime < shortestRemTime) {
                             shortestId = j;
                             shortestRemTime = processors[j].cpuRemainingTime;
                         }
-                        //printf("%d,\t\tcpu[%d] Remaining Time %d\n", clock, j, processors[j].cpuRemainingTime);
                     }
-                    //printf("%d,Enqueuing process %d to CPU %d\n", clock, processes[processTracker].processId, shortestId);
                     enQueue(processors[shortestId].cpuQueue, processes[processTracker], &processors[shortestId].cpuRemainingTime, &processors[shortestId].back, &processors[shortestId].front);
-                    //printf("CPU %d remaining time %d\n\n", shortestId, processors[shortestId].cpuRemainingTime);
-                    shortestId = 0;
-                    shortestRemTime = 9999;
                 }
                 else if(strcmp(&processes[processTracker].parallelisable, "p") == 0 && coreCount > 1) {
                     // for dual-cores, allocate to both. for 'N≥3 Cores', allocate according to x/k≥1 rule
@@ -174,18 +153,17 @@ int main(int argc, char **argv) {
                         processes[processTracker].executionTime = subTime; // update execution time in process table (processes[] array)
                         processes[processTracker].subProcessFin = splitCount;
 
-                        // enqueue processes to fastest processors
-                        fastestId = 0;
-                        temp = processors[0].cpuRemainingTime;
+                        // allocate parallelisable process that have just arrived to fastest processors
+                        shortestId = 0;
+                        shortestRemTime = processors[0].cpuRemainingTime;
                         for(int i=0; i<splitCount; i++) {
                             for(int j=0; j<coreCount; j++) {
-                                if(processors[j].cpuRemainingTime <= temp) {
-                                    fastestId = i;
-                                    temp = processors[i].cpuRemainingTime;
+                                if(processors[j].cpuRemainingTime <= shortestRemTime) {
+                                    shortestId = i;
+                                    shortestRemTime = processors[i].cpuRemainingTime;
                                 }
                             }
-                            //printf("%d,Enqueuing %d %d %d %c into CPU %d\n", clock, processes[processTracker].timeArrived, processes[processTracker].processId, processes[processTracker].executionTime, processes[processTracker].parallelisable, fastestId);
-                            enQueue(processors[fastestId].cpuQueue, processes[processTracker],  &processors[fastestId].cpuRemainingTime, &processors[fastestId].back, &processors[fastestId].front);
+                            enQueue(processors[shortestId].cpuQueue, processes[processTracker],  &processors[shortestId].cpuRemainingTime, &processors[shortestId].back, &processors[shortestId].front);
                         }
                     }
                 }
@@ -197,34 +175,26 @@ int main(int argc, char **argv) {
                 }
             }
         }
-        // step function for each core
-        /*
-        for(int k=0; k<coreCount; k++) {
-            step(&processors[k], &processesCompleted);
-        }
-        */
 
+        // cycle through each processor, count how many will finish a process (NOT subprocess) in the current time step
         for(int k=0; k<coreCount; k++) {
             if(isFinishing(&processors[k], &processes) == 1) {
                 numFin++;
                 processesRemaining--;
             }
         }
-        // printf("%d,procs_finishing=%d\n", clock, numFin);
+
         // run step function for each processor
         for(int k=0; k<coreCount; k++) {
-            // printf("\t%d,Running step function for CPU %d rem_exec=%d\n", clock, k, processors[k].cpuRemainingExec);
-            // step(&processors[k], &processesCompleted, &processes);
             if(cFlag == 0) {
                 step(&processors[k], &processesCompleted, &processes);
             } else {
                 challengeStep(&processors[k], &processesCompleted, &processes, quantum);
             }
         }
-        // additional loop for processors that finished a process, but still have processes in their queues
+        // run loop for processors that have just finished a process, and have a non-empty waiting queue
         for(int k=0; k<coreCount; k++) {
             if(processors[k].state == 0) {
-                // printf("\t%d,alt loop CPU %d, state=%d, exec_time_rem=%d\n", clock, k, processors[k].state, processors[k].cpuRemainingExec);
                 if(cFlag == 0) {
                     step(&processors[k], &processesCompleted, &processes);
                 } else {
@@ -232,36 +202,8 @@ int main(int argc, char **argv) {
                 }
             }
         }
-
-        // if(quantum == -1) {
-        //     for(int k=0; k<coreCount; k++) {
-        //         if(isFinishing(&processors[k], &processes) == 1) {
-        //             numFin++;
-        //             processesRemaining--;
-        //         }
-        //     }
-        //     // printf("%d,procs_finishing=%d\n", clock, numFin);
-        //     // run step function for each processor
-        //     for(int k=0; k<coreCount; k++) {
-        //         // printf("\t%d,Running step function for CPU %d rem_exec=%d\n", clock, k, processors[k].cpuRemainingExec);
-        //         step(&processors[k], &processesCompleted, &processes);
-        //     }
-        //     // additional loop for processors that finished a process, but still have processes in their queues
-        //     for(int k=0; k<coreCount; k++) {
-        //         if(processors[k].state == 0) {
-        //             // printf("\t%d,alt loop CPU %d, state=%d, exec_time_rem=%d\n", clock, k, processors[k].state, processors[k].cpuRemainingExec);
-        //             step(&processors[k], &processesCompleted, &processes);
-        //         }
-        //     }
-        // } else {
-        //     // challenge
-        //     for(int k=0; k<coreCount; k++) {
-        //         challengeStep(&processors[k], &processesCompleted, processes, quantum);
-        //     }
-        // }
         clock++;
         numFin = 0;
-        // printf("%d,\t\t%d %d\n", clock, processesCompleted, numProcesses);
     }
 
     // print performance statistics
