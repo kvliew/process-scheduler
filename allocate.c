@@ -53,13 +53,13 @@ int main(int argc, char **argv) {
     for(int i = 0; i < numProcesses; i++) {
         fscanf(processesFile, "%d %d %d %c", &processes[i].timeArrived, &processes[i].processId, &processes[i].executionTime, &processes[i].parallelisable);
         processes[i].originalExecutionTime = processes[i].executionTime; // a copy of the execution time is stored to calculate performance statistics
-        processes[i].subProcessIndex = i;
+        processes[i].processTableIndex = i;
         processes[i].subProcessFin = 9999;
     }
 
     // printf("Printing Original Process Table\n");
     // for(int i=0; i<numProcesses; i++) {
-    //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].subProcessIndex, processes[i].subProcessFin);
+    //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].processTableIndex, processes[i].subProcessFin);
     // }
 
     // sort process table
@@ -101,12 +101,12 @@ int main(int argc, char **argv) {
         }
     }
     for(int i=0; i<numProcesses; i++) {
-        processes[i].subProcessIndex = i;
+        processes[i].processTableIndex = i;
     }
     // printf("Printing Process Table sorted by id\n");
     // for(int i=0; i<numProcesses; i++) {
     //     // printf("Process %d: %d %d %d %c\n", i, processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable);
-    //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].subProcessIndex, processes[i].subProcessFin);
+    //     printf("%d %d %d %c %d %d %d\n", processes[i].timeArrived, processes[i].processId, processes[i].executionTime, processes[i].parallelisable, processes[i].originalExecutionTime, processes[i].processTableIndex, processes[i].subProcessFin);
     // }
 
     // initialise array of CPUs
