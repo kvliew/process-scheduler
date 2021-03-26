@@ -30,7 +30,8 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
             }
             processor->currentlyRunning.timeArrived = -1; // once a process is completed, 'invalidate' it
         } else if(processor->cpuRemainingExec > 1) { // CPU is still running a process or subprocess
-            if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1)) { // SRTF Implementation
+            if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1) && (cFlag == 0)) {
+                // SRTF Implementation
                 processor->currentlyRunning.executionTime--;
                 enQueue(processor->cpuQueue, processor->currentlyRunning, &processor->cpuRemainingTime, &processor->back, &processor->front);
                 processor->currentlyRunning = deQueue(processor);
