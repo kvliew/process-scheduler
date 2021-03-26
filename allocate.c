@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
     struct process *processes;
     processes = NULL;
     int quantum = -1;
-    processTracker = 0;
+    int processTracker = 0;
 
     // store command line arguments
     while((opt = getopt(argc, argv, "f:p:c")) != -1) {
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
     }
 
     // count processes in file
-    numProcesses = 0;
+    int numProcesses = 0;
     for(c = getc(processesFile); c != EOF; c = getc(processesFile)) {
         if(c == '\n') {
             numProcesses++;

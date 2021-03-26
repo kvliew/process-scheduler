@@ -20,10 +20,12 @@ cpuQueue: array of all unfinished processes and subprocesses assigned to CPU
 
 int numFin;
 int clock;
-int processTracker;
 int processesRemaining;
-int numProcesses;
 int coreCount; // number of processors specified in command line argument
+
+// global variables removed
+// int numProcesses;
+// int processTracker;
 
 //struct process *processes; // process table
 
@@ -36,7 +38,7 @@ float avgTimeOverhead;
 float avgTurnaroundTime;
 
 // queue variables
-int inputProcesses;
+// int inputProcesses;
 
 void step(struct cpu *processor, int *processesCompleted, struct process **processes);
 void challengeStep(struct cpu *processor, int *processesCompleted, struct process *processes, int quantum);
