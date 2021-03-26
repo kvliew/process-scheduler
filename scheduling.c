@@ -163,7 +163,7 @@ int calculateSplitCount(int time) {
     int nSub = coreCount; // number of subprocesses
     int kMultiplier = 1;
     if(cFlag == 1) {
-        kMultiplier = 1;
+        kMultiplier = 5;
     }
 
     for(int i=0; i<coreCount; i++) {
