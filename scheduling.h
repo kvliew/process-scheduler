@@ -22,9 +22,9 @@ int numFin;
 int clock;
 int processesRemaining;
 int coreCount; // number of processors specified in command line argument
+int numProcesses;
 
 // global variables removed
-// int numProcesses;
 // int processTracker;
 
 //struct process *processes; // process table

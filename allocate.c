@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
     }
 
     // count processes in file
-    int numProcesses = 0;
+    numProcesses = 0;
     for(c = getc(processesFile); c != EOF; c = getc(processesFile)) {
         if(c == '\n') {
             numProcesses++;
