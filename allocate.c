@@ -131,7 +131,7 @@ int main(int argc, char **argv) {
     int temp;
     int fastestId;
 
-    int numFin = 0;
+    // int numFin = 0;
 
     // simulation loop
     while(1) {
