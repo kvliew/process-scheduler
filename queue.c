@@ -31,8 +31,7 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
         //     }
         // }
 
-        // using qsort()
-        qsort(cpuQueue, (*back)+1, sizeof(struct process), cmp_first);
+        qsort(cpuQueue, (*back)+1, sizeof(struct process), cmpTimeArrivedExecTime);
 
         // printf("\nPrinting Unsorted Queue\n");
         // for(int i=0; i<numProcesses; i++) {
@@ -53,7 +52,7 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
             if(cpuQueue[k].executionTime != cpuQueue[k+1].executionTime || (k == (size - 1))) {
                 if(exec_dup > 1) {
                     //printf("qsort %d %d\n", k-exec_dup+1, exec_dup);
-                    qsort(&cpuQueue[k-exec_dup+1], exec_dup, sizeof(struct process), cmp_second);
+                    qsort(&cpuQueue[k-exec_dup+1], exec_dup, sizeof(struct process), cmpExecTimeProcessId);
                     exec_dup = 1;
                 }
             }
