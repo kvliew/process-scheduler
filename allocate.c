@@ -228,7 +228,7 @@ int main(int argc, char **argv) {
             }
         }
         clock++;
-        numFin = 0;
+        // numFin = 0;
         // printf("%d,\t\t%d %d\n", clock, processesCompleted, numProcesses);
     }
 
