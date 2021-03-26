@@ -214,21 +214,23 @@ int main(int argc, char **argv) {
         // run step function for each processor
         for(int k=0; k<coreCount; k++) {
             // printf("\t%d,Running step function for CPU %d rem_exec=%d\n", clock, k, processors[k].cpuRemainingExec);
-            if(cFlag == 0) {
-                step(&processors[k], &processesCompleted, &processes);
-            } else {
-                challengeStep(&processors[k], &processesCompleted, &processes, quantum);
-            }
+            step(&processors[k], &processesCompleted, &processes);
+            // if(cFlag == 0) {
+            //     step(&processors[k], &processesCompleted, &processes);
+            // } else {
+            //     challengeStep(&processors[k], &processesCompleted, &processes, quantum);
+            // }
         }
         // additional loop for processors that finished a process, but still have processes in their queues
         for(int k=0; k<coreCount; k++) {
             if(processors[k].state == 0) {
                 // printf("\t%d,alt loop CPU %d, state=%d, exec_time_rem=%d\n", clock, k, processors[k].state, processors[k].cpuRemainingExec);
-                if(cFlag == 0) {
-                    step(&processors[k], &processesCompleted, &processes);
-                } else {
-                    challengeStep(&processors[k], &processesCompleted, &processes, quantum);
-                }
+                step(&processors[k], &processesCompleted, &processes);
+                // if(cFlag == 0) {
+                //     step(&processors[k], &processesCompleted, &processes);
+                // } else {
+                //     challengeStep(&processors[k], &processesCompleted, &processes, quantum);
+                // }
             }
         }
 
