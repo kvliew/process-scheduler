@@ -162,10 +162,14 @@ int calculateSplitCount(int time) {
     if(cFlag == 1) {
         kMultiplier = 4;
     }
+
     for(int i=0; i<coreCount; i++) {
         if((kMultiplier*nSub) > time) {
             nSub--;
         }
+    }
+    if(nSub <= 1) {
+        nSub = 1;
     }
     return nSub;
 }
