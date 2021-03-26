@@ -59,7 +59,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
             //     step(processor, processesCompleted, processes);
             // }
         } else if(processor->cpuRemainingExec > 1) { // CPU is still running a process or subprocess
-            if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1)) {
+            if(processor->cpuQueue[processor->front].executionTime < processor->currentlyRunning.executionTime && (processor->front != -1) && (processor->back != -1) && (cFlag == 0)) {
                 // if fastest process in cpu queue is faster than currently running process, interrupt the current process
                 processor->currentlyRunning.executionTime--;
                 // printf("%d,\t\t\tInterrupt CPU[%d] enqueuing %d %d %d %c\n", clock, processor->cpuId, processor->currentlyRunning.timeArrived, processor->currentlyRunning.processId, processor->currentlyRunning.executionTime, processor->currentlyRunning.parallelisable);
