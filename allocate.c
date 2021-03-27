@@ -60,6 +60,7 @@ int main(int argc, char **argv) {
     }
 
     // sort process table
+    // for processes that arrive at the same time, sort processes by execution time
     int exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
         if(processes[k].timeArrived == processes[k+1].timeArrived) {
@@ -77,6 +78,7 @@ int main(int argc, char **argv) {
             }
         }
     }
+    // for processes that have the same execution time, sort processes by process ID
     exec_dup = 1;
     for(int k=0; k<numProcesses; k++) {
         if(processes[k].executionTime == processes[k+1].executionTime && processes[k].timeArrived == processes[k+1].timeArrived) {
@@ -93,6 +95,7 @@ int main(int argc, char **argv) {
             }
         }
     }
+    // re-enter the process table index of the sorted array of processes
     for(int i=0; i<numProcesses; i++) {
         processes[i].processTableIndex = i;
     }

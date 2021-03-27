@@ -9,7 +9,7 @@
 
 // each processor has its own step function, complete with its own process queue
 void step(struct cpu *processor, int *processesCompleted, struct process **processes) {
-    // CPU RUNNING
+    // cpu running state
     if(processor->state == 1) {
         if(processor->cpuRemainingExec <= 1) { // CPU has just finished a process or subprocess
             if(processor->currentlyRunning.timeArrived != -1) {
@@ -46,7 +46,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
         }
     }
 
-    // CPU IDLE
+    // cpu idle state
     else if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) {
         processor->currentlyRunning = deQueue(processor);
         processor->cpuRemainingExec = processor->currentlyRunning.executionTime;
@@ -57,7 +57,7 @@ void step(struct cpu *processor, int *processesCompleted, struct process **proce
 
 // the challenge task algorithm implements a version of the Round Robin Scheduling Algorithm
 void challengeStep(struct cpu *processor, int *processesCompleted, struct process **processes, int quantum) {
-    // CPU RUNNING
+    // cpu running state
     if(processor->state == 1) { // CPU is running a process or subprocess
         if(processor->cpuRemainingExec <= 1) { // CPU just finished a process, subprocess, or quantum
             if(processor->ending == 1) { // process/subprocess finished
@@ -91,7 +91,7 @@ void challengeStep(struct cpu *processor, int *processesCompleted, struct proces
         }
     }
 
-    // CPU IDLE
+    // cpu idle state
     else if(processor->state == 0 && (processor->front != -1) && (processor->back != -1)) {
         processor->currentlyRunning = deQueue(processor);
         processor->cpuRemainingExec = processor->currentlyRunning.executionTime;
@@ -154,6 +154,8 @@ void calculatePerformance(struct process processEntry) {
     }
 }
 
+// returns 1 if the input processor will finish a process (NOT subprocess) in the current time step, 0 otherwise
+// this function will also decrement the subProcessFin variable when it encounters a processor that is about to finish a non-final subprocess of a parallelisable process
 int isFinishing(struct cpu *processor, struct process **processes) {
     int finishing = 0;
     if(processor->state == 1) { // CPU Running state
@@ -174,6 +176,7 @@ int isFinishing(struct cpu *processor, struct process **processes) {
     return finishing;
 }
 
+// compare functions for qsort calls in main()
 int cmpTimeArrivedExecTime(const void *a, const void *b) {
     struct process const *ia = a;
     struct process const *ib = b;
