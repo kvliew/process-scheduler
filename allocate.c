@@ -106,14 +106,6 @@ int main(int argc, char **argv) {
         processes[i].processTableIndex = i;
     }
 
-    // calculate quantum based on execution time averages
-    int total = 0;
-    for(int i=0; i < numProcesses; i++) {
-        total += processes[i].executionTime;
-    }
-    quantum = total/numProcesses;
-    quantum = quantum/2;
-
     // initialise array of CPUs
     struct cpu processors[coreCount];
     for(int k=0; k<coreCount; k++) {
