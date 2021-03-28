@@ -111,7 +111,7 @@ int calculateSplitCount(int time) {
     int nSub = coreCount;
     int kMultiplier = 1; // k value such that such that x/k≥1
     if(cFlag == 1) {
-        kMultiplier = 1;
+        kMultiplier = 5;
     }
 
     for(int i=0; i<coreCount; i++) {
