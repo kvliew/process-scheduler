@@ -34,7 +34,7 @@ int main(int argc, char **argv) {
                 coreCount = atoi(optarg);
                 break;
             case 'c':
-                quantum = 20;
+                quantum = 50;
                 cFlag = 1;
                 break;
         }
