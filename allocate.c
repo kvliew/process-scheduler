@@ -9,18 +9,24 @@
 #include "queue.h"
 
 int main(int argc, char **argv) {
+    // file reading variables
     FILE *processesFile;
     char *fileName;
     int opt;
     char c;
-
     struct process *processes;
     processes = NULL;
 
-    clock = 0;
-    int quantum = -1;
+    int quantum = -1; // quantum for round robin implementation
     int processTracker = 0;
+    int splitCount; // stores number of times a parallelisable process is to be split
+    int subTime; // stores the execution time of a sub-process
+    int processesCompleted = 0;
+    int shortestId = 0; // id of CPU with smallest amount of remaining execution time (fastest processor)
+    int shortestRemTime = 9999; // execution time of the fastest processor
     cFlag = 0; // 0 for non-challenge tasks, 1 for challenge tasks
+    clock = 0;
+    numFin = 0; // stores the number of processes that will finish in the current time step
 
     // store command line arguments
     while((opt = getopt(argc, argv, "f:p:c")) != -1) {
@@ -112,13 +118,6 @@ int main(int argc, char **argv) {
         processors[k].cpuRemainingExec = 0;
         processors[k].cpuId = k;
     }
-
-    int splitCount; // stores number of times a parallelisable process is to be split
-    int subTime; // stores the execution time of a sub-process
-    int processesCompleted = 0;
-    int shortestId = 0; // id of CPU with smallest amount of remaining execution time (fastest processor)
-    int shortestRemTime = 9999; // execution time of the fastest processor
-    numFin = 0;
 
     // simulation loop
     while(1) {
