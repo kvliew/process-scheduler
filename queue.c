@@ -13,23 +13,25 @@ void enQueue(struct process cpuQueue[], struct process processEntry, int *cpuRem
         cpuQueue[*back] = processEntry;
         (*cpuRemainingTime) += processEntry.executionTime;
 
-        // sort array by execution time
-        qsort(cpuQueue, (*back)+1, sizeof(struct process), cmpTimeArrivedExecTime);
-
-        // for processes with the same execution time, sort by process id
-        int exec_dup = 1;
-        int size = (*back) + 1;
-        for(int k=0; k<size; k++) {
-            if(cpuQueue[k].executionTime == cpuQueue[k+1].executionTime) {
-                exec_dup++;
-                if(k == size - 1) {
-                    exec_dup--;
+        // if no challenge task, sort by execution time then process id
+        if(cFlag == 0) {
+            // sort array by execution time
+            qsort(cpuQueue, (*back)+1, sizeof(struct process), cmpTimeArrivedExecTime);
+            // for processes with the same execution time, sort by process id
+            int exec_dup = 1;
+            int size = (*back) + 1;
+            for(int k=0; k<size; k++) {
+                if(cpuQueue[k].executionTime == cpuQueue[k+1].executionTime) {
+                    exec_dup++;
+                    if(k == size - 1) {
+                        exec_dup--;
+                    }
                 }
-            }
-            if(cpuQueue[k].executionTime != cpuQueue[k+1].executionTime || (k == (size - 1))) {
-                if(exec_dup > 1) {
-                    qsort(&cpuQueue[k-exec_dup+1], exec_dup, sizeof(struct process), cmpExecTimeProcessId);
-                    exec_dup = 1;
+                if(cpuQueue[k].executionTime != cpuQueue[k+1].executionTime || (k == (size - 1))) {
+                    if(exec_dup > 1) {
+                        qsort(&cpuQueue[k-exec_dup+1], exec_dup, sizeof(struct process), cmpExecTimeProcessId);
+                        exec_dup = 1;
+                    }
                 }
             }
         }

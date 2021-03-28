@@ -71,7 +71,6 @@ void challengeStep(struct cpu *processor, int *processesCompleted, struct proces
                         if((*processes)[processor->currentlyRunning.processTableIndex].subProcessFin == 1 && (numFin > 0)) { // processor has finished all subprocesses of a process
                             (*processesCompleted)++;
                             (*processes)[processor->currentlyRunning.processTableIndex].subProcessFin = -1;
-                            // processesRemaining--;
                             printf("%d,FINISHED,pid=%d,proc_remaining=%d\n", clock, processor->currentlyRunning.processId, processesRemaining);
                             calculatePerformance(processor->currentlyRunning);
                         }
