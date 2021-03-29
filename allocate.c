@@ -17,6 +17,7 @@ int main(int argc, char **argv) {
     struct process *processes;
     processes = NULL;
 
+    // simulation variables
     int quantum = -1; // quantum for round robin implementation
     int processTracker = 0;
     int splitCount; // stores number of times a parallelisable process is to be split
@@ -25,8 +26,8 @@ int main(int argc, char **argv) {
     int shortestId = 0; // id of CPU with smallest amount of remaining execution time (fastest processor)
     int shortestRemTime = 9999; // execution time of the fastest processor
     cFlag = 0; // 0 for non-challenge tasks, 1 for challenge tasks
-    clock = 0;
     numFin = 0; // stores the number of processes that will finish in the current time step
+    clock = 0;
 
     // store command line arguments
     while((opt = getopt(argc, argv, "f:p:c")) != -1) {
