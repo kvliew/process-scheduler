@@ -14,4 +14,4 @@ I attempted the 2020 version of COMP30023 but later withdrew due to personal rea
 - The calculatePerformance() function (used to calculate required performance statistic) is set up the same why as in my previous submission, with throughput calculations omitted.
 
 **queue.c**
-- enQueue() and deQueue() functions are re-used functions from the queue used in my previous submission. For enQueue(), several modifications were made, including the utilisation qsort() for sorting processes.
+- enQueue() and deQueue() functions are re-used functions from the queue used in my previous submission. For enQueue(), several modifications were made, including utilisation of qsort() for sorting processes.
