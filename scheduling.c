@@ -110,13 +110,8 @@ void challengeStep(struct cpu *processor, int *processesCompleted, struct proces
 // calculate how many times to split a parallelisable process for the N-Processor Scheduler (largest value of k such that x/k≥1)
 int calculateSplitCount(int time) {
     int nSub = coreCount;
-    int kMultiplier = 1; // k value such that such that x/k≥1
-    if(cFlag == 1) {
-        kMultiplier = 5;
-    }
-
     for(int i=0; i<coreCount; i++) {
-        if((kMultiplier*nSub) > time) {
+        if(nSub > time) {
             nSub--;
         }
     }

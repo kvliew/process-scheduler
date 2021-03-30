@@ -1,4 +1,5 @@
 The algorithm used for the challenge task is the Round-robin Algorithm, with
 quantum set to 50. In this implementation, processes that exceed the running
 time quantum of 50 time steps will be interrupted and pushed into their
-respective processor's queue. The processor will run the process next in queue.
+respective processor's queue. The processor will then run the process next in
+queue.
